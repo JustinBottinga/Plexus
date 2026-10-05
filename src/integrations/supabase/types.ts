@@ -14,7 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cards: {
+        Row: {
+          category_id: string
+          covers: Json
+          created_at: string
+          function: string | null
+          id: string
+          image_author: string | null
+          image_license: string | null
+          image_path: string | null
+          image_source: string | null
+          innervation: string | null
+          insertion: string | null
+          marker: Json | null
+          name_latin: string | null
+          name_nl: string
+          origin: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          covers?: Json
+          created_at?: string
+          function?: string | null
+          id?: string
+          image_author?: string | null
+          image_license?: string | null
+          image_path?: string | null
+          image_source?: string | null
+          innervation?: string | null
+          insertion?: string | null
+          marker?: Json | null
+          name_latin?: string | null
+          name_nl: string
+          origin?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          category_id?: string
+          covers?: Json
+          created_at?: string
+          function?: string | null
+          id?: string
+          image_author?: string | null
+          image_license?: string | null
+          image_path?: string | null
+          image_source?: string | null
+          innervation?: string | null
+          insertion?: string | null
+          marker?: Json | null
+          name_latin?: string | null
+          name_nl?: string
+          origin?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cards_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categories: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          user_id?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

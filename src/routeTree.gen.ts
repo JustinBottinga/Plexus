@@ -16,6 +16,8 @@ import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/h
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedStudyRouteImport } from './routes/_authenticated/study'
+import { Route as AuthenticatedCardsIdRouteImport } from './routes/_authenticated/cards.$id'
+import { Route as AuthenticatedCardsNewRouteImport } from './routes/_authenticated/cards.new'
 import { Route as AuthenticatedCategoriesIdRouteImport } from './routes/_authenticated/categories.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -52,6 +54,16 @@ const AuthenticatedStudyRoute = AuthenticatedStudyRouteImport.update({
   path: '/study',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCardsIdRoute = AuthenticatedCardsIdRouteImport.update({
+  id: '/cards/$id',
+  path: '/cards/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCardsNewRoute = AuthenticatedCardsNewRouteImport.update({
+  id: '/cards/new',
+  path: '/cards/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCategoriesIdRoute =
   AuthenticatedCategoriesIdRouteImport.update({
     id: '/categories/$id',
@@ -66,6 +78,8 @@ export interface FileRoutesByFullPath {
   '/library': typeof AuthenticatedLibraryRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/study': typeof AuthenticatedStudyRoute
+  '/cards/$id': typeof AuthenticatedCardsIdRoute
+  '/cards/new': typeof AuthenticatedCardsNewRoute
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
 }
 export interface FileRoutesByTo {
@@ -75,6 +89,8 @@ export interface FileRoutesByTo {
   '/library': typeof AuthenticatedLibraryRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/study': typeof AuthenticatedStudyRoute
+  '/cards/$id': typeof AuthenticatedCardsIdRoute
+  '/cards/new': typeof AuthenticatedCardsNewRoute
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
 }
 export interface FileRoutesById {
@@ -86,6 +102,8 @@ export interface FileRoutesById {
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/study': typeof AuthenticatedStudyRoute
+  '/_authenticated/cards/$id': typeof AuthenticatedCardsIdRoute
+  '/_authenticated/cards/new': typeof AuthenticatedCardsNewRoute
   '/_authenticated/categories/$id': typeof AuthenticatedCategoriesIdRoute
 }
 export interface FileRouteTypes {
@@ -97,6 +115,8 @@ export interface FileRouteTypes {
     | '/library'
     | '/profile'
     | '/study'
+    | '/cards/$id'
+    | '/cards/new'
     | '/categories/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -106,6 +126,8 @@ export interface FileRouteTypes {
     | '/library'
     | '/profile'
     | '/study'
+    | '/cards/$id'
+    | '/cards/new'
     | '/categories/$id'
   id:
     | '__root__'
@@ -116,6 +138,8 @@ export interface FileRouteTypes {
     | '/_authenticated/library'
     | '/_authenticated/profile'
     | '/_authenticated/study'
+    | '/_authenticated/cards/$id'
+    | '/_authenticated/cards/new'
     | '/_authenticated/categories/$id'
   fileRoutesById: FileRoutesById
 }
@@ -176,6 +200,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedStudyRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/cards/$id': {
+      id: '/_authenticated/cards/$id'
+      path: '/cards/$id'
+      fullPath: '/cards/$id'
+      preLoaderRoute: typeof AuthenticatedCardsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cards/new': {
+      id: '/_authenticated/cards/new'
+      path: '/cards/new'
+      fullPath: '/cards/new'
+      preLoaderRoute: typeof AuthenticatedCardsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/categories/$id': {
       id: '/_authenticated/categories/$id'
       path: '/categories/$id'
@@ -191,6 +229,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedStudyRoute: typeof AuthenticatedStudyRoute
+  AuthenticatedCardsIdRoute: typeof AuthenticatedCardsIdRoute
+  AuthenticatedCardsNewRoute: typeof AuthenticatedCardsNewRoute
   AuthenticatedCategoriesIdRoute: typeof AuthenticatedCategoriesIdRoute
 }
 
@@ -199,6 +239,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedStudyRoute: AuthenticatedStudyRoute,
+  AuthenticatedCardsIdRoute: AuthenticatedCardsIdRoute,
+  AuthenticatedCardsNewRoute: AuthenticatedCardsNewRoute,
   AuthenticatedCategoriesIdRoute: AuthenticatedCategoriesIdRoute,
 }
 

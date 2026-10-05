@@ -2,6 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Placeholder } from "@/components/Placeholder";
 
 export const Route = createFileRoute("/_authenticated/library")({
-  head: () => ({ meta: [{ title: "Library — Anatomie" }, { name: "description", content: "Shared library." }, { property: "og:title", content: "Library — Anatomie" }, { property: "og:description", content: "Shared library." }] }),
-  component: () => <Placeholder title="Library" text="A shared library with classmates is on its way." color="bg-mint" />,
+  head: () => ({ meta: [{ title: "Bibliotheek — Anatomie" }, { name: "description", content: "Gedeelde bibliotheek." }, { property: "og:title", content: "Bibliotheek — Anatomie" }, { property: "og:description", content: "Gedeelde bibliotheek." }] }),
+  component: () => <Placeholder title="Bibliotheek" text="Een gedeelde bibliotheek met klasgenoten komt eraan." color="bg-mint" />,
 });

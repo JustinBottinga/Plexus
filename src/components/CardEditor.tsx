@@ -29,7 +29,7 @@ const schema = z.object({
 const field = "h-12 rounded-full border-on-pastel/10 bg-card/70 px-5";
 const area = "rounded-[22px] border-on-pastel/10 bg-card/70 px-5 py-3";
 
-export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCategory?: string }) {
+export function CardEditor({ card, defaultCategory }: { card?: Card | undefined; defaultCategory?: string | undefined }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const { data: cats } = useQuery(categoriesQuery);
@@ -52,10 +52,10 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
   const [mode, setMode] = useState<"marker" | "cover">("marker");
   const [saving, setSaving] = useState(false);
   const [dragOver, setDragOver] = useState(false);
-  const { data: remoteUrl } = useSignedUrl(file ? null : card?.image_path);
+  const { data: remoteUrl } = useSignedUrl(file ? null : (card?.image_path ?? null));
 
   useEffect(() => {
-    if (!f.category_id && cats?.[0]) setF((s) => ({ ...s, category_id: cats[0].id }));
+    if (!f.category_id && cats?.[0]) setF((s) => ({ ...s, category_id: cats[0]!.id }));
   }, [cats, f.category_id]);
 
   const color = colorOf(cats?.find((c) => c.id === f.category_id)?.color);
@@ -63,9 +63,9 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
   const up = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
 
   function pick(fl: File | undefined) {
-    if (!fl) return;
-    if (!fl.type.startsWith("image/")) return toast.error("Please choose an image");
-    if (fl.size > 10 * 1024 * 1024) return toast.error("Image must be under 10 MB");
+    if (!fl) return undefined;
+    if (!fl.type.startsWith("image/")) { toast.error("Please choose an image"); return; }
+    if (fl.size > 10 * 1024 * 1024) { toast.error("Image must be under 10 MB"); return; }
     setFile(fl);
     setLocalUrl(URL.createObjectURL(fl));
     setMarker(null);
@@ -74,8 +74,8 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
 
   async function save() {
     const parsed = schema.safeParse(f);
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
-    if (!imgUrl) return toast.error("Add an image");
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid"); return; }
+    if (!imgUrl) { toast.error("Add an image"); return; }
     setSaving(true);
     try {
       const { data: u } = await supabase.auth.getUser();
@@ -124,7 +124,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
     if (!card || !confirm("Delete this card?")) return;
     if (card.image_path) await supabase.storage.from(BUCKET).remove([card.image_path]);
     const { error } = await supabase.from("cards").delete().eq("id", card.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["cards"] });
     qc.invalidateQueries({ queryKey: ["categories"] });
     navigate({ to: "/categories/$id", params: { id: card.category_id } });

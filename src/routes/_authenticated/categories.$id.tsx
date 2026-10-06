@@ -30,7 +30,7 @@ function CategoryPage() {
     const paths = (cards ?? []).map((c) => c.image_path).filter(Boolean) as string[];
     if (paths.length) await supabase.storage.from("card-images").remove(paths);
     const { error } = await supabase.from("categories").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["categories"] });
     navigate({ to: "/home" });
   }

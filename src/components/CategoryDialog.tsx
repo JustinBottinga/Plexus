@@ -29,12 +29,13 @@ export function CategoryDialog({
 
   async function save() {
     const n = name.trim();
-    if (!n || n.length > 60) { toast.error("Name must be 1–60 characters"); return; }
+    if (!n || n.length > 60) { toast.error("De naam moet 1–60 tekens lang zijn"); return; }
     const { error } = initial
       ? await supabase.from("categories").update({ name: n, color }).eq("id", initial.id)
       : await supabase.from("categories").insert({ name: n, color });
     if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["categories"] });
+    qc.invalidateQueries({ queryKey: ["cards", "study"] });
     setOpen(false);
   }
 
@@ -43,9 +44,9 @@ export function CategoryDialog({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="rounded-[30px] border-0 bg-card">
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl">{initial ? "Edit category" : "New category"}</DialogTitle>
+          <DialogTitle className="font-display text-2xl">{initial ? "Categorie bewerken" : "Nieuwe categorie"}</DialogTitle>
         </DialogHeader>
-        <Input className="h-12 rounded-full px-5" placeholder="e.g. Upper Limb" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+        <Input className="h-12 rounded-full px-5" placeholder="bijv. Bovenste extremiteit" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
         <div className="grid grid-cols-6 gap-2">
           {PALETTE.map((p) => (
             <button
@@ -57,7 +58,7 @@ export function CategoryDialog({
             />
           ))}
         </div>
-        <Button size="lg" onClick={save}>Save</Button>
+        <Button size="lg" onClick={save}>Opslaan</Button>
       </DialogContent>
     </Dialog>
   );

@@ -11,10 +11,14 @@ import { BoxEditor } from "@/components/BoxEditor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 
 const schema = z.object({
-  name_nl: z.string().trim().min(1, "Name is required").max(120),
+  name_nl: z.string().trim().min(1, "Naam is verplicht").max(120),
   name_latin: z.string().trim().max(160),
   origin: z.string().max(1000),
   insertion: z.string().max(1000),
@@ -23,13 +27,13 @@ const schema = z.object({
   image_source: z.string().trim().max(300),
   image_author: z.string().trim().max(200),
   image_license: z.string().trim().max(100),
-  category_id: z.string().uuid("Pick a category"),
+  category_id: z.string().uuid("Kies een categorie"),
 });
 
-const field = "h-12 rounded-full border-on-pastel/10 bg-card/70 px-5";
-const area = "rounded-[22px] border-on-pastel/10 bg-card/70 px-5 py-3";
+const field = "h-12 rounded-full border-on-pastel/10 bg-white/70 px-5 text-on-pastel placeholder:text-on-pastel/60";
+const area = "rounded-[22px] border-on-pastel/10 bg-white/70 px-5 py-3 text-on-pastel placeholder:text-on-pastel/60";
 
-export function CardEditor({ card, defaultCategory }: { card?: Card | undefined; defaultCategory?: string | undefined }) {
+export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCategory?: string }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const { data: cats } = useQuery(categoriesQuery);
@@ -52,7 +56,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
   const [mode, setMode] = useState<"marker" | "cover">("marker");
   const [saving, setSaving] = useState(false);
   const [dragOver, setDragOver] = useState(false);
-  const { data: remoteUrl } = useSignedUrl(file ? null : (card?.image_path ?? null));
+  const { data: remoteUrl } = useSignedUrl(file ? null : card?.image_path);
 
   useEffect(() => {
     if (!f.category_id && cats?.[0]) setF((s) => ({ ...s, category_id: cats[0]!.id }));
@@ -63,9 +67,9 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
   const up = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
 
   function pick(fl: File | undefined) {
-    if (!fl) return undefined;
-    if (!fl.type.startsWith("image/")) { toast.error("Please choose an image"); return; }
-    if (fl.size > 10 * 1024 * 1024) { toast.error("Image must be under 10 MB"); return; }
+    if (!fl) return;
+    if (!fl.type.startsWith("image/")) { toast.error("Kies een afbeelding"); return; }
+    if (fl.size > 10 * 1024 * 1024) { toast.error("De afbeelding mag maximaal 10 MB zijn"); return; }
     setFile(fl);
     setLocalUrl(URL.createObjectURL(fl));
     setMarker(null);
@@ -74,8 +78,8 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
 
   async function save() {
     const parsed = schema.safeParse(f);
-    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid"); return; }
-    if (!imgUrl) { toast.error("Add an image"); return; }
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Ongeldig"); return; }
+    if (!imgUrl) { toast.error("Voeg een afbeelding toe"); return; }
     setSaving(true);
     try {
       const { data: u } = await supabase.auth.getUser();
@@ -111,7 +115,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
       qc.invalidateQueries({ queryKey: ["cards"] });
       qc.invalidateQueries({ queryKey: ["card"] });
       qc.invalidateQueries({ queryKey: ["categories"] });
-      toast.success("Card saved");
+      toast.success("Kaart opgeslagen");
       navigate({ to: "/categories/$id", params: { id: d.category_id } });
     } catch (e) {
       toast.error((e as Error).message);
@@ -121,11 +125,12 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
   }
 
   async function remove() {
-    if (!card || !confirm("Delete this card?")) return;
+    if (!card) return;
     if (card.image_path) await supabase.storage.from(BUCKET).remove([card.image_path]);
     const { error } = await supabase.from("cards").delete().eq("id", card.id);
     if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["cards"] });
+    qc.removeQueries({ queryKey: ["card", card.id] });
     qc.invalidateQueries({ queryKey: ["categories"] });
     navigate({ to: "/categories/$id", params: { id: card.category_id } });
   }
@@ -133,27 +138,41 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
   return (
     <div className={cn("min-h-screen px-5 pb-10 pt-8 text-on-pastel transition-colors", color.bg)}>
       <div className="flex items-center justify-between">
-        <button onClick={() => history.back()} className="flex size-11 items-center justify-center rounded-full bg-card/60" aria-label="Back">
+        <button onClick={() => history.back()} className="flex size-12 items-center justify-center rounded-full bg-white/60" aria-label="Terug">
           <ArrowLeft className="size-5" />
         </button>
         {card && (
-          <button onClick={remove} className="flex size-11 items-center justify-center rounded-full bg-card/60" aria-label="Delete card">
-            <Trash2 className="size-4" />
-          </button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button className="flex size-12 items-center justify-center rounded-full bg-white/60" aria-label="Kaart verwijderen">
+                <Trash2 className="size-4" />
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="rounded-[30px]">
+              <AlertDialogHeader>
+                <AlertDialogTitle>“{card.name_nl}” verwijderen?</AlertDialogTitle>
+                <AlertDialogDescription>Deze kaart en de afbeelding worden definitief verwijderd.</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="rounded-full">Annuleren</AlertDialogCancel>
+                <AlertDialogAction className="rounded-full" onClick={remove}>Verwijderen</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </div>
-      <h1 className="mt-6 text-4xl font-semibold">{card ? "Edit card" : "New card"}</h1>
+      <h1 className="mt-6 text-4xl font-semibold">{card ? "Kaart bewerken" : "Nieuwe kaart"}</h1>
 
       <section className="mt-6 space-y-3">
-        <Input className={field} placeholder="Name (NL)" value={f.name_nl} onChange={up("name_nl")} />
-        <Input className={cn(field, "italic")} placeholder="Latin name (optional)" value={f.name_latin} onChange={up("name_latin")} />
+        <Input className={field} placeholder="Naam (NL)" value={f.name_nl} onChange={up("name_nl")} />
+        <Input className={cn(field, "italic")} placeholder="Latijnse naam (optioneel)" value={f.name_latin} onChange={up("name_latin")} />
         <div className="flex flex-wrap gap-2">
           {cats?.map((c) => (
             <button
               key={c.id}
               type="button"
               onClick={() => setF({ ...f, category_id: c.id })}
-              className={cn("rounded-full border-2 px-4 py-2 text-sm font-medium", colorOf(c.color).bg, f.category_id === c.id ? "border-on-pastel" : "border-card/70")}
+              className={cn("flex h-12 items-center rounded-full border-2 px-5 text-sm font-medium transition-transform", colorOf(c.color).bg, f.category_id === c.id ? "pop border-on-pastel" : "border-white/70")}
             >
               {c.name}
             </button>
@@ -167,24 +186,24 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={(e) => { e.preventDefault(); setDragOver(false); pick(e.dataTransfer.files[0]); }}
-            className={cn("tile flex aspect-[4/3] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-on-pastel/25 bg-card/50", dragOver && "bg-card")}
+            className={cn("tile flex aspect-[4/3] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-on-pastel/25 bg-white/50", dragOver && "bg-white/80")}
           >
             <ImagePlus className="size-8" />
-            <span className="mt-2 font-semibold">Drop an image or click to upload</span>
-            <span className="text-xs opacity-60">PNG, JPG up to 10 MB</span>
+            <span className="mt-2 font-semibold">Sleep een afbeelding hierheen of klik om te uploaden</span>
+            <span className="text-xs opacity-75">PNG of JPG, maximaal 10 MB</span>
             <input type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />
           </label>
         ) : (
           <>
             <div className="mb-3 flex flex-wrap items-center gap-2">
-              <button type="button" onClick={() => setMode("marker")} className={cn("flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold", mode === "marker" ? "bg-primary text-primary-foreground" : "bg-card/60")}>
-                <Square className="size-4" /> Highlight
+              <button type="button" onClick={() => setMode("marker")} className={cn("flex h-12 items-center gap-2 rounded-full px-5 text-sm font-semibold", mode === "marker" ? "pop bg-primary text-primary-foreground" : "bg-white/60")}>
+                <Square className="size-4" /> Markeren
               </button>
-              <button type="button" onClick={() => setMode("cover")} className={cn("flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold", mode === "cover" ? "bg-primary text-primary-foreground" : "bg-card/60")}>
-                <SquareDashed className="size-4" /> Cover labels
+              <button type="button" onClick={() => setMode("cover")} className={cn("flex h-12 items-center gap-2 rounded-full px-5 text-sm font-semibold", mode === "cover" ? "pop bg-primary text-primary-foreground" : "bg-white/60")}>
+                <SquareDashed className="size-4" /> Labels afdekken
               </button>
-              <label className="ml-auto cursor-pointer rounded-full bg-card/60 px-4 py-2 text-sm font-semibold">
-                Replace
+              <label className="ml-auto flex h-12 cursor-pointer items-center rounded-full bg-white/60 px-5 text-sm font-semibold">
+                Vervangen
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />
               </label>
             </div>
@@ -196,31 +215,31 @@ export function CardEditor({ card, defaultCategory }: { card?: Card | undefined;
               coverClass={color.deep}
               onChange={(m, c) => { setMarker(m); setCovers(c); }}
             />
-            <p className="mt-2 text-xs opacity-60">
-              {mode === "marker" ? "Drag on the image to draw the highlight. Drag to move, use the corner to resize." : "Drag over printed labels to cover them."}
+            <p className="mt-2 text-xs opacity-75">
+              {mode === "marker" ? "Sleep over de afbeelding om de markering te tekenen. Sleep om te verplaatsen, gebruik de hoek om het formaat te wijzigen." : "Sleep over gedrukte labels om ze af te dekken."}
             </p>
           </>
         )}
       </section>
 
       <section className="mt-6 grid gap-3 sm:grid-cols-2">
-        <Textarea className={area} placeholder="Origin" value={f.origin} onChange={up("origin")} />
-        <Textarea className={area} placeholder="Insertion" value={f.insertion} onChange={up("insertion")} />
-        <Textarea className={area} placeholder="Innervation" value={f.innervation} onChange={up("innervation")} />
-        <Textarea className={area} placeholder="Function" value={f.function} onChange={up("function")} />
+        <Textarea className={area} placeholder="Origo" value={f.origin} onChange={up("origin")} />
+        <Textarea className={area} placeholder="Insertie" value={f.insertion} onChange={up("insertion")} />
+        <Textarea className={area} placeholder="Innervatie" value={f.innervation} onChange={up("innervation")} />
+        <Textarea className={area} placeholder="Functie" value={f.function} onChange={up("function")} />
       </section>
 
       <section className="mt-6 space-y-3">
-        <p className="text-sm font-semibold">Image attribution</p>
-        <Input className={field} placeholder="Source (URL or book)" value={f.image_source} onChange={up("image_source")} />
+        <p className="text-sm font-semibold">Bronvermelding afbeelding</p>
+        <Input className={field} placeholder="Bron (URL of boek)" value={f.image_source} onChange={up("image_source")} />
         <div className="grid grid-cols-2 gap-3">
-          <Input className={field} placeholder="Author" value={f.image_author} onChange={up("image_author")} />
-          <Input className={field} placeholder="License" value={f.image_license} onChange={up("image_license")} />
+          <Input className={field} placeholder="Auteur" value={f.image_author} onChange={up("image_author")} />
+          <Input className={field} placeholder="Licentie" value={f.image_license} onChange={up("image_license")} />
         </div>
       </section>
 
       <Button size="lg" className="mt-8 w-full" onClick={save} disabled={saving}>
-        {saving ? "Saving…" : "Save card"}
+        {saving ? "Opslaan…" : "Kaart opslaan"}
       </Button>
     </div>
   );

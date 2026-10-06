@@ -15,12 +15,12 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedCardsIdRouteImport } from './routes/_authenticated/cards.$id'
 import { Route as AuthenticatedCardsNewRouteImport } from './routes/_authenticated/cards.new'
 import { Route as AuthenticatedCategoriesIdRouteImport } from './routes/_authenticated/categories.$id'
 import { Route as AuthenticatedStudyIndexRouteImport } from './routes/_authenticated/study.index'
 import { Route as AuthenticatedStudySessionRouteImport } from './routes/_authenticated/study.session'
 import { Route as AuthenticatedCardsIdIndexRouteImport } from './routes/_authenticated/cards.$id.index'
-import { Route as AuthenticatedCardsIdEditRouteImport } from './routes/_authenticated/cards.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -51,6 +51,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCardsIdRoute = AuthenticatedCardsIdRouteImport.update({
+  id: '/cards/$id',
+  path: '/cards/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCardsNewRoute = AuthenticatedCardsNewRouteImport.update({
   id: '/cards/new',
   path: '/cards/new',
@@ -75,15 +80,9 @@ const AuthenticatedStudySessionRoute =
   } as any)
 const AuthenticatedCardsIdIndexRoute =
   AuthenticatedCardsIdIndexRouteImport.update({
-    id: '/cards/$id/',
-    path: '/cards/$id/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedCardsIdEditRoute =
-  AuthenticatedCardsIdEditRouteImport.update({
-    id: '/cards/$id/edit',
-    path: '/cards/$id/edit',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedCardsIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -92,11 +91,11 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/cards/$id': typeof AuthenticatedCardsIdRouteWithChildren
   '/cards/new': typeof AuthenticatedCardsNewRoute
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
   '/study/session': typeof AuthenticatedStudySessionRoute
   '/study/': typeof AuthenticatedStudyIndexRoute
-  '/cards/$id/edit': typeof AuthenticatedCardsIdEditRoute
   '/cards/$id/': typeof AuthenticatedCardsIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -109,7 +108,6 @@ export interface FileRoutesByTo {
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
   '/study/session': typeof AuthenticatedStudySessionRoute
   '/study': typeof AuthenticatedStudyIndexRoute
-  '/cards/$id/edit': typeof AuthenticatedCardsIdEditRoute
   '/cards/$id': typeof AuthenticatedCardsIdIndexRoute
 }
 export interface FileRoutesById {
@@ -120,11 +118,11 @@ export interface FileRoutesById {
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/cards/$id': typeof AuthenticatedCardsIdRouteWithChildren
   '/_authenticated/cards/new': typeof AuthenticatedCardsNewRoute
   '/_authenticated/categories/$id': typeof AuthenticatedCategoriesIdRoute
   '/_authenticated/study/session': typeof AuthenticatedStudySessionRoute
   '/_authenticated/study/': typeof AuthenticatedStudyIndexRoute
-  '/_authenticated/cards/$id/edit': typeof AuthenticatedCardsIdEditRoute
   '/_authenticated/cards/$id/': typeof AuthenticatedCardsIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -135,11 +133,11 @@ export interface FileRouteTypes {
     | '/home'
     | '/library'
     | '/profile'
+    | '/cards/$id'
     | '/cards/new'
     | '/categories/$id'
     | '/study/session'
     | '/study/'
-    | '/cards/$id/edit'
     | '/cards/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -152,7 +150,6 @@ export interface FileRouteTypes {
     | '/categories/$id'
     | '/study/session'
     | '/study'
-    | '/cards/$id/edit'
     | '/cards/$id'
   id:
     | '__root__'
@@ -162,11 +159,11 @@ export interface FileRouteTypes {
     | '/_authenticated/home'
     | '/_authenticated/library'
     | '/_authenticated/profile'
+    | '/_authenticated/cards/$id'
     | '/_authenticated/cards/new'
     | '/_authenticated/categories/$id'
     | '/_authenticated/study/session'
     | '/_authenticated/study/'
-    | '/_authenticated/cards/$id/edit'
     | '/_authenticated/cards/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -220,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/cards/$id': {
+      id: '/_authenticated/cards/$id'
+      path: '/cards/$id'
+      fullPath: '/cards/$id'
+      preLoaderRoute: typeof AuthenticatedCardsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/cards/new': {
       id: '/_authenticated/cards/new'
       path: '/cards/new'
@@ -250,43 +254,45 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/cards/$id/': {
       id: '/_authenticated/cards/$id/'
-      path: '/cards/$id'
+      path: '/'
       fullPath: '/cards/$id/'
       preLoaderRoute: typeof AuthenticatedCardsIdIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/cards/$id/edit': {
-      id: '/_authenticated/cards/$id/edit'
-      path: '/cards/$id/edit'
-      fullPath: '/cards/$id/edit'
-      preLoaderRoute: typeof AuthenticatedCardsIdEditRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedCardsIdRoute
     }
   }
 }
+
+interface AuthenticatedCardsIdRouteChildren {
+  AuthenticatedCardsIdIndexRoute: typeof AuthenticatedCardsIdIndexRoute
+}
+
+const AuthenticatedCardsIdRouteChildren: AuthenticatedCardsIdRouteChildren = {
+  AuthenticatedCardsIdIndexRoute: AuthenticatedCardsIdIndexRoute,
+}
+
+const AuthenticatedCardsIdRouteWithChildren =
+  AuthenticatedCardsIdRoute._addFileChildren(AuthenticatedCardsIdRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedCardsIdRoute: typeof AuthenticatedCardsIdRouteWithChildren
   AuthenticatedCardsNewRoute: typeof AuthenticatedCardsNewRoute
   AuthenticatedCategoriesIdRoute: typeof AuthenticatedCategoriesIdRoute
   AuthenticatedStudySessionRoute: typeof AuthenticatedStudySessionRoute
   AuthenticatedStudyIndexRoute: typeof AuthenticatedStudyIndexRoute
-  AuthenticatedCardsIdEditRoute: typeof AuthenticatedCardsIdEditRoute
-  AuthenticatedCardsIdIndexRoute: typeof AuthenticatedCardsIdIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedCardsIdRoute: AuthenticatedCardsIdRouteWithChildren,
   AuthenticatedCardsNewRoute: AuthenticatedCardsNewRoute,
   AuthenticatedCategoriesIdRoute: AuthenticatedCategoriesIdRoute,
   AuthenticatedStudySessionRoute: AuthenticatedStudySessionRoute,
   AuthenticatedStudyIndexRoute: AuthenticatedStudyIndexRoute,
-  AuthenticatedCardsIdEditRoute: AuthenticatedCardsIdEditRoute,
-  AuthenticatedCardsIdIndexRoute: AuthenticatedCardsIdIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

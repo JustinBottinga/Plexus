@@ -29,11 +29,11 @@ export function CategoryDialog({
 
   async function save() {
     const n = name.trim();
-    if (!n || n.length > 60) return toast.error("De naam moet 1–60 tekens lang zijn");
+    if (!n || n.length > 60) { toast.error("De naam moet 1–60 tekens lang zijn"); return; }
     const { error } = initial
       ? await supabase.from("categories").update({ name: n, color }).eq("id", initial.id)
       : await supabase.from("categories").insert({ name: n, color });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["categories"] });
     qc.invalidateQueries({ queryKey: ["cards", "study"] });
     setOpen(false);

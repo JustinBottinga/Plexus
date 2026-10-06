@@ -59,7 +59,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
   const { data: remoteUrl } = useSignedUrl(file ? null : card?.image_path);
 
   useEffect(() => {
-    if (!f.category_id && cats?.[0]) setF((s) => ({ ...s, category_id: cats[0].id }));
+    if (!f.category_id && cats?.[0]) setF((s) => ({ ...s, category_id: cats[0]!.id }));
   }, [cats, f.category_id]);
 
   const color = colorOf(cats?.find((c) => c.id === f.category_id)?.color);
@@ -68,8 +68,8 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
 
   function pick(fl: File | undefined) {
     if (!fl) return;
-    if (!fl.type.startsWith("image/")) return toast.error("Kies een afbeelding");
-    if (fl.size > 10 * 1024 * 1024) return toast.error("De afbeelding mag maximaal 10 MB zijn");
+    if (!fl.type.startsWith("image/")) { toast.error("Kies een afbeelding"); return; }
+    if (fl.size > 10 * 1024 * 1024) { toast.error("De afbeelding mag maximaal 10 MB zijn"); return; }
     setFile(fl);
     setLocalUrl(URL.createObjectURL(fl));
     setMarker(null);
@@ -78,8 +78,8 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
 
   async function save() {
     const parsed = schema.safeParse(f);
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
-    if (!imgUrl) return toast.error("Voeg een afbeelding toe");
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Ongeldig"); return; }
+    if (!imgUrl) { toast.error("Voeg een afbeelding toe"); return; }
     setSaving(true);
     try {
       const { data: u } = await supabase.auth.getUser();
@@ -128,7 +128,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
     if (!card) return;
     if (card.image_path) await supabase.storage.from(BUCKET).remove([card.image_path]);
     const { error } = await supabase.from("cards").delete().eq("id", card.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["cards"] });
     qc.removeQueries({ queryKey: ["card", card.id] });
     qc.invalidateQueries({ queryKey: ["categories"] });

@@ -14,20 +14,19 @@ import { supabase } from "@/integrations/supabase/client";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { themeInitScript } from "../lib/theme";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Pagina niet gevonden</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
           >
-            Naar start
+            Go home
           </Link>
         </div>
       </div>
@@ -45,8 +44,8 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">Deze pagina kon niet laden</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Er ging iets mis. Probeer het opnieuw.</p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">This page didn't load</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Something went wrong. Try again.</p>
         <button
           onClick={() => {
             router.invalidate();
@@ -54,7 +53,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
           }}
           className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
         >
-          Opnieuw proberen
+          Try again
         </button>
       </div>
     </div>
@@ -67,7 +66,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Anatomie — flashcards" },
-      { name: "description", content: "Anatomie-flashcards voor studenten." },
+      { name: "description", content: "Anatomy flashcards for students." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -82,7 +81,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
   }),
-  scripts: () => [{ children: themeInitScript }],
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -91,7 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="nl" suppressHydrationWarning>
+    <html lang="nl">
       <head>
         <HeadContent />
       </head>

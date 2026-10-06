@@ -8,20 +8,6 @@
       "when": 1791228166393,
       "tag": "0000_migration",
       "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1791314566393,
-      "tag": "0001_reviews_public_bucket",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1791400966393,
-      "tag": "0002_review_log",
-      "breakpoints": true
     }
   ]
 }

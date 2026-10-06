@@ -57,43 +57,15 @@ export const cardQuery = (id: string) =>
     },
   });
 
-export const signedUrlQuery = (path: string) =>
-  queryOptions({
+export function useSignedUrl(path: string | null | undefined) {
+  return useQuery({
     queryKey: ["signed", path],
+    enabled: !!path,
     staleTime: 50 * 60 * 1000,
     queryFn: async () => {
-      const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(path, 3600);
+      const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(path!, 3600);
       if (error) throw error;
       return data.signedUrl;
     },
   });
-
-export function useSignedUrl(path: string | null | undefined) {
-  return useQuery({ ...signedUrlQuery(path ?? ""), enabled: !!path });
 }
-
-/** PostgREST returns at most 1000 rows per request, so page through bigger tables. */
-async function fetchAll<T>(page: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: Error | null }>) {
-  const size = 1000;
-  const rows: T[] = [];
-  for (let from = 0; ; from += size) {
-    const { data, error } = await page(from, from + size - 1);
-    if (error) throw error;
-    rows.push(...(data ?? []));
-    if (!data || data.length < size) return rows;
-  }
-}
-
-/** Everything study mode needs. Key starts with "cards" so card edits invalidate it too. */
-export const studyDataQuery = queryOptions({
-  queryKey: ["cards", "study"],
-  queryFn: async () => {
-    const [cards, reviews, categories] = await Promise.all([
-      fetchAll<Card>((a, b) => supabase.from("cards").select("*").order("created_at").range(a, b)),
-      fetchAll<Tables<"reviews">>((a, b) => supabase.from("reviews").select("*").range(a, b)),
-      supabase.from("categories").select("*").order("created_at"),
-    ]);
-    if (categories.error) throw categories.error;
-    return { cards, reviews, categories: categories.data };
-  },
-});

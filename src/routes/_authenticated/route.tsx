@@ -1,16 +1,11 @@
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { BookOpen, Home, Play, User } from "lucide-react";
-import { flushPending } from "@/lib/reviewWriter";
-import { ensureDevSession } from "@/lib/devLogin";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    let { data, error } = await supabase.auth.getUser();
-    // On localhost, sign in automatically with the account from .env.local
-    if ((error || !data.user) && (await ensureDevSession())) ({ data, error } = await supabase.auth.getUser());
+    const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) throw redirect({ to: "/auth" });
     return { user: data.user };
   },
@@ -18,20 +13,13 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 const tabs = [
-  { to: "/home", icon: Home, label: "Start" },
-  { to: "/study", icon: Play, label: "Leren" },
-  { to: "/library", icon: BookOpen, label: "Bibliotheek" },
-  { to: "/profile", icon: User, label: "Profiel" },
+  { to: "/home", icon: Home, label: "Home" },
+  { to: "/study", icon: Play, label: "Study" },
+  { to: "/library", icon: BookOpen, label: "Library" },
+  { to: "/profile", icon: User, label: "Profile" },
 ] as const;
 
 function AppShell() {
-  // Ratings that could not be saved earlier (offline, closed tab) are retried when the app opens or reconnects
-  useEffect(() => {
-    void flushPending();
-    window.addEventListener("online", flushPending);
-    return () => window.removeEventListener("online", flushPending);
-  }, []);
-
   return (
     <div className="mx-auto min-h-screen max-w-2xl pb-28">
       <Outlet />
@@ -41,9 +29,8 @@ function AppShell() {
             <Link
               key={t.to}
               to={t.to}
-              aria-label={t.label}
               className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-sm font-semibold text-muted-foreground transition-colors"
-              activeProps={{ className: "pop bg-butter text-on-pastel" }}
+              activeProps={{ className: "bg-butter text-on-pastel" }}
             >
               <t.icon className="size-5" />
               <span className="hidden sm:inline">{t.label}</span>

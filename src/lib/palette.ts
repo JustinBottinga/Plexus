@@ -1,10 +1,10 @@
 export const PALETTE = [
-  { key: "butter", label: "Botergeel", bg: "bg-butter", deep: "bg-butter-deep" },
-  { key: "periwinkle", label: "Lavendelblauw", bg: "bg-periwinkle", deep: "bg-periwinkle-deep" },
+  { key: "butter", label: "Butter", bg: "bg-butter", deep: "bg-butter-deep" },
+  { key: "periwinkle", label: "Periwinkle", bg: "bg-periwinkle", deep: "bg-periwinkle-deep" },
   { key: "mint", label: "Mint", bg: "bg-mint", deep: "bg-mint-deep" },
-  { key: "peach", label: "Perzik", bg: "bg-peach", deep: "bg-peach-deep" },
-  { key: "sky", label: "Hemelsblauw", bg: "bg-sky", deep: "bg-sky-deep" },
-  { key: "lilac", label: "Lila", bg: "bg-lilac", deep: "bg-lilac-deep" },
+  { key: "peach", label: "Peach", bg: "bg-peach", deep: "bg-peach-deep" },
+  { key: "sky", label: "Sky", bg: "bg-sky", deep: "bg-sky-deep" },
+  { key: "lilac", label: "Lilac", bg: "bg-lilac", deep: "bg-lilac-deep" },
 ] as const;
 
 export type ColorKey = (typeof PALETTE)[number]["key"];

@@ -3,18 +3,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { profileQuery } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useTheme, type ThemePref } from "@/lib/theme";
-import { cn } from "@/lib/utils";
-import { Monitor, Moon, Sun } from "lucide-react";
-
-const THEMES: { key: ThemePref; label: string; icon: typeof Sun }[] = [
-  { key: "system", label: "Systeem", icon: Monitor },
-  { key: "light", label: "Licht", icon: Sun },
-  { key: "dark", label: "Donker", icon: Moon },
-];
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "Profiel — Anatomie" }, { name: "description", content: "Je profiel." }, { property: "og:title", content: "Profiel — Anatomie" }, { property: "og:description", content: "Je profiel." }] }),
+  head: () => ({ meta: [{ title: "Profile — Anatomie" }, { name: "description", content: "Your profile." }, { property: "og:title", content: "Profile — Anatomie" }, { property: "og:description", content: "Your profile." }] }),
   component: Profile,
 });
 
@@ -23,7 +14,6 @@ function Profile() {
   const qc = useQueryClient();
   const navigate = useNavigate();
   const name = data?.profile?.display_name ?? "";
-  const { pref, set } = useTheme();
 
   async function signOut() {
     await qc.cancelQueries();
@@ -42,30 +32,11 @@ function Profile() {
         <p className="text-sm text-muted-foreground">{data?.user.email}</p>
       </div>
       <div className="tile mt-8 bg-butter p-6 text-on-pastel">
-        <p className="text-xs opacity-80">Statistieken</p>
-        <p className="mt-1 font-semibold">Je leerdashboard komt in een latere fase.</p>
+        <p className="text-xs opacity-70">Stats</p>
+        <p className="mt-1 font-semibold">Your study dashboard arrives in a later phase.</p>
       </div>
-      <section className="mt-6 rounded-[30px] border bg-card p-5">
-        <p className="font-display text-xl font-semibold">Weergave</p>
-        <div role="radiogroup" aria-label="Thema" className="mt-3 grid grid-cols-3 gap-2">
-          {THEMES.map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              role="radio"
-              aria-checked={pref === key}
-              onClick={() => set(key)}
-              className={cn(
-                "flex h-12 items-center justify-center gap-2 rounded-full text-sm font-semibold transition-transform active:scale-95",
-                pref === key ? "pop bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground",
-              )}
-            >
-              <Icon className="size-4" /> {label}
-            </button>
-          ))}
-        </div>
-      </section>
       <Button variant="outline" size="lg" className="mt-6 w-full" onClick={signOut}>
-        Uitloggen
+        Sign out
       </Button>
     </div>
   );

@@ -106,7 +106,7 @@ export function BoxEditor({
               onPointerDown={(e) => e.stopPropagation()}
               onClick={() => { set(s, null); setSel(null); }}
               className="absolute -right-3 -top-3 flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground"
-              aria-label="Verwijderen"
+              aria-label="Remove"
             >
               <X className="size-4" />
             </button>

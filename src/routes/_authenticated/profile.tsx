@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { profileQuery } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { InfoHint } from "@/components/InfoHint";
 import { notificationsSupported, useDueNotificationPref } from "@/lib/dueNotification";
 import { useTheme, type ThemePref } from "@/lib/theme";
 import { cn } from "@/lib/utils";
@@ -69,13 +70,13 @@ function Profile() {
       </section>
       <section className="mt-6 rounded-[30px] border bg-card p-5">
         <div className="flex min-h-12 items-center justify-between gap-4">
-          <label htmlFor="due-notifications" className="flex-1 cursor-pointer">
-            <span className="block font-display text-xl font-semibold">Melding bij kaarten</span>
-            <span className="block text-sm text-muted-foreground">
-              Eén melding per dag als er kaarten aan de beurt zijn en je nog niet hebt geoefend. Alleen als Plexus open
-              staat op de achtergrond.
-            </span>
+          <label htmlFor="due-notifications" className="flex-1 cursor-pointer font-display text-xl font-semibold">
+            Melding bij kaarten
           </label>
+          <InfoHint label="Meer over deze melding">
+            Eén melding per dag als er kaarten aan de beurt zijn en je nog niet hebt geoefend. Alleen als Plexus open
+            staat op de achtergrond.
+          </InfoHint>
           <Switch
             id="due-notifications"
             checked={notify.enabled && notify.permission === "granted"}

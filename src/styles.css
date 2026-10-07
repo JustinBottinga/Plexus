@@ -38,6 +38,13 @@
   --color-ink: var(--ink);
   --color-ink-foreground: var(--ink-foreground);
   --color-on-pastel: var(--on-pastel);
+  --color-on-pastel-muted: var(--on-pastel-muted);
+  --color-pastel-surface: var(--pastel-surface);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-error: var(--error);
+  --color-error-surface: var(--error-surface);
+  --color-scrim: var(--scrim);
   --color-butter: var(--butter);
   --color-periwinkle: var(--periwinkle);
   --color-mint: var(--mint);
@@ -78,6 +85,13 @@
   --ink: oklch(0.2 0.005 70);
   --ink-foreground: oklch(0.98 0.007 85);
   --on-pastel: oklch(0.2 0.01 70);
+  --on-pastel-muted: oklch(0.38 0.01 70);
+  --pastel-surface: oklch(1 0 0);
+  --success: oklch(0.38 0.09 160);
+  --success-surface: oklch(0.92 0.05 160);
+  --error: oklch(0.4 0.14 25);
+  --error-surface: oklch(0.92 0.04 25);
+  --scrim: oklch(0 0 0);
   --butter: oklch(0.9 0.1 90);
   --periwinkle: oklch(0.8 0.08 275);
   --mint: oklch(0.9 0.08 160);
@@ -107,6 +121,8 @@
   --secondary-foreground: oklch(0.96 0.005 85);
   --muted: oklch(0.27 0 0);
   --muted-foreground: oklch(0.72 0.01 85);
+  --success: oklch(0.82 0.12 160);
+  --error: oklch(0.82 0.1 25);
   --accent: oklch(0.27 0 0);
   --accent-foreground: oklch(0.96 0.005 85);
   --border: oklch(1 0 0 / 10%);
@@ -133,7 +149,7 @@
 
 @utility font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
 }
 
 @utility grain {
@@ -187,7 +203,7 @@
   }
   h1, h2, h3 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
   }
 }
 

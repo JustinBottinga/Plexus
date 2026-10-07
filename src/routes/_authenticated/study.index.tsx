@@ -279,21 +279,18 @@ function StudySetup() {
             />
           )}
           {/* Stays visible above the tab bar while the settings scroll */}
-          <div className="sticky bottom-24 z-30 -mx-2 mt-6 rounded-[32px] bg-background/90 p-2 backdrop-blur">
-            {ready > 0 && (
-              <p className="mb-2 text-center text-sm text-muted-foreground">
-                {ready} {ready === 1 ? "kaart" : "kaarten"} in deze sessie
-              </p>
-            )}
+          {/* Only the pill floats above the content: no backdrop, so the plus grid stays unbroken */}
+          <div className="sticky bottom-24 z-30 mt-6">
             <Button
               size="lg"
-              className="w-full"
+              className="w-full shadow-lg"
               disabled={ready === 0}
               onClick={() =>
                 navigate({ to: "/study/session", search: sessionSearch(s, selected, practice) })
               }
             >
               {practice ? "Start oefensessie" : "Start sessie"}
+              {ready > 0 && ` · ${ready} ${ready === 1 ? "kaart" : "kaarten"}`}
             </Button>
           </div>
         </>

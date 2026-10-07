@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_authenticated/categories/$id")({
-  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Categorie — Anatomie" }, { name: "description", content: "Kaarten in deze categorie." }, { property: "og:title", content: "Categorie — Anatomie" }, { property: "og:description", content: "Kaarten in deze categorie." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Categorie — Plexus" }, { name: "description", content: "Kaarten in deze categorie." }, { property: "og:title", content: "Categorie — Plexus" }, { property: "og:description", content: "Kaarten in deze categorie." }] }),
   component: CategoryPage,
 });
 

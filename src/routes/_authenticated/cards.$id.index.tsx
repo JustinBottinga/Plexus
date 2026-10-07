@@ -7,7 +7,7 @@ import { BoxPreview } from "@/components/BoxEditor";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/cards/$id/")({
-  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Kaart — Anatomie" }, { name: "description", content: "Bekijk een flashcard." }, { property: "og:title", content: "Kaart — Anatomie" }, { property: "og:description", content: "Bekijk een flashcard." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Kaart — Plexus" }, { name: "description", content: "Bekijk een flashcard." }, { property: "og:title", content: "Kaart — Plexus" }, { property: "og:description", content: "Bekijk een flashcard." }] }),
   component: CardView,
 });
 

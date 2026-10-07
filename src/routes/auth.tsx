@@ -14,9 +14,9 @@ export const Route = createFileRoute("/auth")({
   validateSearch: z.object({ redirect: z.string().optional().catch(undefined) }),
   head: () => ({
     meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, 
-      { title: "Inloggen — Anatomie" },
+      { title: "Inloggen — Plexus" },
       { name: "description", content: "Log in op je anatomie-flashcards." },
-      { property: "og:title", content: "Inloggen — Anatomie" },
+      { property: "og:title", content: "Inloggen — Plexus" },
       { property: "og:description", content: "Log in op je anatomie-flashcards." },
     ],
   }),

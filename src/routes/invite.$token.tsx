@@ -20,7 +20,7 @@ export const Route = createFileRoute("/invite/$token")({
   },
   head: () => ({
     meta: [
-      { title: "Uitnodiging — Anatomie" },
+      { title: "Uitnodiging — Plexus" },
       { name: "description", content: "Je bent uitgenodigd voor een categorie." },
       { name: "robots", content: "noindex" },
     ],

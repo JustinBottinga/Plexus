@@ -11,7 +11,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/home")({
-  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Start — Anatomie" }, { name: "description", content: "Je anatomie-flashcards." }, { property: "og:title", content: "Start — Anatomie" }, { property: "og:description", content: "Je anatomie-flashcards." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Start — Plexus" }, { name: "description", content: "Je anatomie-flashcards." }, { property: "og:title", content: "Start — Plexus" }, { property: "og:description", content: "Je anatomie-flashcards." }] }),
   component: HomePage,
 });
 

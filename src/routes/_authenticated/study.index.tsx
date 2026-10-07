@@ -21,9 +21,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/study/")({
   head: () => ({
     meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, 
-      { title: "Leren — Anatomie" },
+      { title: "Leren — Plexus" },
       { name: "description", content: "Start een leersessie." },
-      { property: "og:title", content: "Leren — Anatomie" },
+      { property: "og:title", content: "Leren — Plexus" },
       { property: "og:description", content: "Start een leersessie." },
     ],
   }),

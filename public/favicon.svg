@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t d">
+  <title id="t">Plexus</title>
+  <desc id="d">Een zenuwnetwerk van acht pastelkleurige knooppunten op een botergele tegel.</desc>
+  <rect width="512" height="512" rx="120" fill="#f8dc90"/>
+  <g fill="none" stroke="#181614" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 146C190 146 186 196 256 196"/>
+    <path d="M120 256C190 256 186 196 256 196"/>
+    <path d="M120 256C190 256 186 316 256 316"/>
+    <path d="M120 366C190 366 186 316 256 316"/>
+    <path d="M256 196C326 196 322 146 392 146"/>
+    <path d="M256 196C326 196 322 256 392 256"/>
+    <path d="M256 316C326 316 322 256 392 256"/>
+    <path d="M256 316C326 316 322 366 392 366"/>
+  </g>
+  <g stroke="#181614" stroke-width="20">
+    <g fill="#aebaf2">
+      <circle cx="120" cy="146" r="34"/>
+      <circle cx="120" cy="256" r="34"/>
+      <circle cx="120" cy="366" r="34"/>
+    </g>
+    <g fill="#fec1a6">
+      <circle cx="256" cy="196" r="34"/>
+      <circle cx="256" cy="316" r="34"/>
+    </g>
+    <g fill="#b0efcc">
+      <circle cx="392" cy="146" r="34"/>
+      <circle cx="392" cy="256" r="34"/>
+      <circle cx="392" cy="366" r="34"/>
+    </g>
+  </g>
+</svg>

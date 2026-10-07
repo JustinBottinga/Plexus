@@ -1,4 +1,4 @@
-# Domme Kut app
+# Plexus
 
 Implement exactly the screenshot and nothing else
 

@@ -14,7 +14,7 @@ const THEMES: { key: ThemePref; label: string; icon: typeof Sun }[] = [
 ];
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Profiel — Anatomie" }, { name: "description", content: "Je profiel." }, { property: "og:title", content: "Profiel — Anatomie" }, { property: "og:description", content: "Je profiel." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Profiel — Plexus" }, { name: "description", content: "Je profiel." }, { property: "og:title", content: "Profiel — Plexus" }, { property: "og:description", content: "Je profiel." }] }),
   component: Profile,
 });
 

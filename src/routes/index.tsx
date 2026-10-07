@@ -8,9 +8,9 @@ import { takeRedirect } from "@/lib/invites";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Anatomie — zachte flashcards voor anatomiestudenten" },
+      { title: "Plexus — zachte flashcards voor anatomiestudenten" },
       { name: "description", content: "Maak je eigen anatomie-flashcards met gemarkeerde structuren, geordend in kleurrijke categorieën." },
-      { property: "og:title", content: "Anatomie — soft flashcards for anatomy students" },
+      { property: "og:title", content: "Plexus — soft flashcards for anatomy students" },
       { property: "og:description", content: "Maak je eigen anatomie-flashcards met gemarkeerde structuren." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -38,7 +38,7 @@ function Landing() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col px-5 py-8">
       <div className="grid flex-1 grid-cols-2 content-center gap-3">
         <div className="tile col-span-2 bg-butter p-7 text-on-pastel">
-          <p className="text-sm font-medium opacity-80">Anatomie</p>
+          <p className="text-sm font-medium opacity-80">Plexus</p>
           <h1 className="mt-10 text-5xl font-semibold leading-[0.95]">Leer elke spier, elk bot & elke zenuw.</h1>
         </div>
         <div className="tile aspect-square bg-periwinkle p-5 text-on-pastel">

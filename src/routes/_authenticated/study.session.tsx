@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/study/session")({
     // 1 = practise every card in the selection again, whether or not it is due
     practice: z.coerce.number().int().min(0).max(1).catch(0),
   }),
-  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Leersessie — Anatomie" }, { name: "description", content: "Leersessie." }, { property: "og:title", content: "Leersessie — Anatomie" }, { property: "og:description", content: "Leersessie." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Leersessie — Plexus" }, { name: "description", content: "Leersessie." }, { property: "og:title", content: "Leersessie — Plexus" }, { property: "og:description", content: "Leersessie." }] }),
   component: SessionPage,
 });
 

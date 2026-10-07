@@ -38,10 +38,15 @@ export function saveSettings(s: StudySettings) {
 }
 
 /** Search params for /study/session. `cats` is omitted for "all categories". */
-export function sessionSearch(s: Pick<StudySettings, "direction" | "newLimit">, categoryIds?: string[] | null) {
+export function sessionSearch(
+  s: Pick<StudySettings, "direction" | "newLimit">,
+  categoryIds?: string[] | null,
+  practice = false,
+) {
   return {
     dir: s.direction,
     new: s.newLimit,
+    ...(practice ? { practice: 1 } : {}),
     ...(categoryIds && categoryIds.length ? { cats: categoryIds.join(",") } : {}),
   };
 }

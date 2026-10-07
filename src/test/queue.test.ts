@@ -41,6 +41,18 @@ describe("session queue", () => {
     expect(q).not.toContain("d");
   });
 
+  it("practice mode includes cards that are not due, ignoring the new-card limit", () => {
+    const q = buildQueue({ ...base, newLimit: 0, practice: true }).map((c) => c.id);
+    expect(q.sort()).toEqual(["a", "b", "c", "d", "e", "f"]); // "c" is due tomorrow, e/f are new
+  });
+
+  it("practice mode still respects the category and direction", () => {
+    expect(buildQueue({ ...base, categoryIds: ["c2"], newLimit: 10, practice: true }).map((c) => c.id).sort()).toEqual(["c", "d"]);
+    expect(
+      buildQueue({ ...base, categoryIds: ["c2"], direction: "location", newLimit: 10, practice: true }).map((c) => c.id),
+    ).toEqual(["c"]);
+  });
+
   it("shuffles within a group", () => {
     const seen = new Set<string>();
     for (let i = 0; i < 40; i++) seen.add(splitCards(base).fresh.map((c) => c.id).join(""));

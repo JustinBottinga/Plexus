@@ -132,6 +132,23 @@ describe("StudySession", () => {
     expect(submitted[0].review).toMatchObject({ interval_days: 1, repetitions: 0, ease_factor: 2.3 });
   });
 
+  it("practice mode shows cards that are not due and saves no reviews", async () => {
+    const tomorrow = new Date(Date.now() + 86_400_000);
+    const due = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, "0")}-${String(tomorrow.getDate()).padStart(2, "0")}`;
+    tables.reviews = [
+      { card_id: "a", due_date: due, ease_factor: 2.5, interval_days: 6, repetitions: 3 },
+      { card_id: "b", due_date: due, ease_factor: 2.5, interval_days: 6, repetitions: 3 },
+    ];
+    renderSession({ practice: true, newLimit: 0 });
+    await screen.findByText("1 / 2");
+    expect(screen.getByText("Oefenen")).toBeTruthy();
+    press(" ");
+    await screen.findByRole("heading", { level: 2 });
+    press("3");
+    await screen.findByText("2 / 2");
+    expect(submitted).toHaveLength(0);
+  });
+
   it("ignores rating keys before the answer is shown", async () => {
     renderSession();
     await screen.findByText("1 / 2");

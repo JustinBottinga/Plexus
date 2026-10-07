@@ -51,7 +51,20 @@ export function splitCards({ cards, reviews, categoryIds, direction, today }: Op
   return { due: dueSorted.map((d) => d.card), fresh: shuffle(fresh, random) };
 }
 
-export function buildQueue(opts: Opts & { newLimit: number }, random = Math.random): Card[] {
+/** Every studyable card in the selected categories, shuffled: for re-practising what is not due yet. */
+export function buildPracticeQueue(
+  { cards, categoryIds, direction }: Pick<Opts, "cards" | "categoryIds" | "direction">,
+  random = Math.random,
+): Card[] {
+  const wanted = categoryIds ? new Set(categoryIds) : null;
+  return shuffle(
+    cards.filter((c) => (!wanted || wanted.has(c.category_id)) && isStudyable(c, direction)),
+    random,
+  );
+}
+
+export function buildQueue(opts: Opts & { newLimit: number; practice?: boolean }, random = Math.random): Card[] {
+  if (opts.practice) return buildPracticeQueue(opts, random);
   const { due, fresh } = splitCards(opts, random);
   return [...due, ...fresh.slice(0, Math.max(0, opts.newLimit))];
 }

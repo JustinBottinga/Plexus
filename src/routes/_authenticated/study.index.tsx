@@ -15,6 +15,7 @@ import {
 } from "@/lib/studySettings";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/study/")({
@@ -52,6 +53,8 @@ function StudySetup() {
   const { data, isLoading } = useQuery(studyDataQuery);
   const [s, setS] = useState<StudySettings>(loadSettings);
   useEffect(() => saveSettings(s), [s]);
+  // Deliberately not remembered: tomorrow the setup starts on the normal schedule again
+  const [practice, setPractice] = useState(false);
 
   const cats = data?.categories ?? [];
   const today = todayLocal();
@@ -66,6 +69,7 @@ function StudySetup() {
           categoryIds: selected,
           direction: s.direction,
           newLimit: s.newLimit,
+          practice,
           today,
         }).length
       : 0;
@@ -203,26 +207,40 @@ function StudySetup() {
         )}
       </section>
 
-      <section className="mt-6" aria-label="Nieuwe kaarten per sessie">
-        <div className="flex items-center justify-between">
-          <label htmlFor="new-limit" className="text-sm font-semibold">
-            Nieuwe kaarten per sessie
+      <section className="mt-6" aria-label="Opnieuw oefenen">
+        <div className="flex min-h-14 items-center justify-between gap-4 rounded-[28px] border bg-card px-5 py-3 text-card-foreground">
+          <label htmlFor="practice" className="flex-1 cursor-pointer">
+            <span className="block text-sm font-semibold">Opnieuw oefenen</span>
+            <span className="block text-xs text-muted-foreground">
+              Alle kaarten in je keuze, ook wat al goed ging. Je planning verandert niet.
+            </span>
           </label>
-          <span className="rounded-full bg-secondary px-3 py-1 text-sm font-semibold tabular-nums">
-            {s.newLimit}
-          </span>
+          <Switch id="practice" checked={practice} onCheckedChange={setPractice} />
         </div>
-        <input
-          id="new-limit"
-          type="range"
-          min={0}
-          max={30}
-          step={1}
-          value={s.newLimit}
-          onChange={(e) => setS({ ...s, newLimit: Number(e.target.value) })}
-          className="mt-1 h-12 w-full cursor-pointer accent-[var(--foreground)]"
-        />
       </section>
+
+      {!practice && (
+        <section className="mt-6" aria-label="Nieuwe kaarten per sessie">
+          <div className="flex items-center justify-between">
+            <label htmlFor="new-limit" className="text-sm font-semibold">
+              Nieuwe kaarten per sessie
+            </label>
+            <span className="rounded-full bg-secondary px-3 py-1 text-sm font-semibold tabular-nums">
+              {s.newLimit}
+            </span>
+          </div>
+          <input
+            id="new-limit"
+            type="range"
+            min={0}
+            max={30}
+            step={1}
+            value={s.newLimit}
+            onChange={(e) => setS({ ...s, newLimit: Number(e.target.value) })}
+            className="mt-1 h-12 w-full cursor-pointer accent-[var(--foreground)]"
+          />
+        </section>
+      )}
 
       {noCards ? (
         <EmptyState
@@ -249,7 +267,7 @@ function StudySetup() {
               text={
                 s.mode !== "all" && selected?.length === 0
                   ? "Kies minstens één categorie om te beginnen."
-                  : "Er staat niets klaar. Kom later terug of verhoog het aantal nieuwe kaarten."
+                  : "Er staat niets klaar. Kom later terug, verhoog het aantal nieuwe kaarten of zet “Opnieuw oefenen” aan."
               }
               className="pt-2"
             />
@@ -265,9 +283,11 @@ function StudySetup() {
               size="lg"
               className="w-full"
               disabled={ready === 0}
-              onClick={() => navigate({ to: "/study/session", search: sessionSearch(s, selected) })}
+              onClick={() =>
+                navigate({ to: "/study/session", search: sessionSearch(s, selected, practice) })
+              }
             >
-              Start sessie
+              {practice ? "Start oefensessie" : "Start sessie"}
             </Button>
           </div>
         </>

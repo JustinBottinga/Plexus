@@ -23,10 +23,13 @@ export function StudySession({
   categoryIds,
   direction,
   newLimit,
+  practice = false,
 }: {
   categoryIds: string[] | null;
   direction: Direction;
   newLimit: number;
+  /** Re-practise everything in the selection; ratings don't touch the review schedule. */
+  practice?: boolean;
 }) {
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -46,8 +49,8 @@ export function StudySession({
   const userId = useRef<string | null>(null);
   const startedAt = useRef(Date.now());
   const loadId = useRef(0);
-  const opts = useRef({ categoryIds, direction, newLimit });
-  opts.current = { categoryIds, direction, newLimit };
+  const opts = useRef({ categoryIds, direction, newLimit, practice });
+  opts.current = { categoryIds, direction, newLimit, practice };
 
   const load = useCallback(async () => {
     const mine = ++loadId.current;
@@ -140,26 +143,29 @@ export function StudySession({
 
   function rate(r: Rating) {
     if (!card || !revealed) return;
-    const prev = states.current.get(card.id) ?? INITIAL_STATE;
-    const next = nextState(prev, r);
-    states.current.set(card.id, next);
-    const now = new Date();
-    if (userId.current) {
-      submitReview({
-        id: crypto.randomUUID(),
-        user_id: userId.current,
-        card_id: card.id,
-        rating: r,
-        direction,
-        reviewed_at: now.toISOString(),
-        review: {
-          ...next,
-          due_date: addDays(todayLocal(now), next.interval_days),
-          last_reviewed: now.toISOString(),
-        },
-      });
-    } else {
-      toast.error("Je bent uitgelogd. Log opnieuw in om je voortgang op te slaan.");
+    // Practice mode never touches the review schedule
+    if (!practice) {
+      const prev = states.current.get(card.id) ?? INITIAL_STATE;
+      const next = nextState(prev, r);
+      states.current.set(card.id, next);
+      const now = new Date();
+      if (userId.current) {
+        submitReview({
+          id: crypto.randomUUID(),
+          user_id: userId.current,
+          card_id: card.id,
+          rating: r,
+          direction,
+          reviewed_at: now.toISOString(),
+          review: {
+            ...next,
+            due_date: addDays(todayLocal(now), next.interval_days),
+            last_reviewed: now.toISOString(),
+          },
+        });
+      } else {
+        toast.error("Je bent uitgelogd. Log opnieuw in om je voortgang op te slaan.");
+      }
     }
     setCounts((c) => ({ ...c, [r]: c[r] + 1 }));
 
@@ -235,6 +241,9 @@ export function StudySession({
         <span className="w-16 shrink-0 text-right text-sm font-semibold tabular-nums">
           {idx + 1} / {queue.length}
         </span>
+        {practice && (
+          <span className="shrink-0 rounded-full bg-pastel-surface/60 px-3 py-1 text-xs font-semibold">Oefenen</span>
+        )}
       </header>
 
       <main className="mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col justify-center px-5 py-3">
@@ -307,7 +316,9 @@ export function StudySession({
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>Sessie afsluiten?</DrawerTitle>
-            <DrawerDescription>Je voortgang is al opgeslagen.</DrawerDescription>
+            <DrawerDescription>
+              {practice ? "Oefenen verandert je planning niet." : "Je voortgang is al opgeslagen."}
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
             <Button size="lg" onClick={() => navigate({ to: "/study" })}>

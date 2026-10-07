@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { profileQuery } from "@/lib/data";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { notificationsSupported, useDueNotificationPref } from "@/lib/dueNotification";
 import { useTheme, type ThemePref } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Monitor, Moon, Sun } from "lucide-react";
@@ -24,6 +26,7 @@ function Profile() {
   const navigate = useNavigate();
   const name = data?.profile?.display_name ?? "";
   const { pref, set } = useTheme();
+  const notify = useDueNotificationPref();
 
   async function signOut() {
     await qc.cancelQueries();
@@ -63,6 +66,32 @@ function Profile() {
             </button>
           ))}
         </div>
+      </section>
+      <section className="mt-6 rounded-[30px] border bg-card p-5">
+        <div className="flex min-h-12 items-center justify-between gap-4">
+          <label htmlFor="due-notifications" className="flex-1 cursor-pointer">
+            <span className="block font-display text-xl font-semibold">Melding bij kaarten</span>
+            <span className="block text-sm text-muted-foreground">
+              Eén melding per dag als er kaarten aan de beurt zijn en je nog niet hebt geoefend. Alleen als Plexus open
+              staat op de achtergrond.
+            </span>
+          </label>
+          <Switch
+            id="due-notifications"
+            checked={notify.enabled && notify.permission === "granted"}
+            disabled={!notificationsSupported()}
+            onCheckedChange={(on) => void notify.setEnabled(on)}
+          />
+        </div>
+        {!notificationsSupported() && (
+          <p className="mt-3 text-sm text-muted-foreground">Deze browser ondersteunt geen meldingen.</p>
+        )}
+        {notify.permission === "denied" && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            Meldingen zijn geblokkeerd voor deze site. Sta ze toe in de instellingen van je browser en zet de schakelaar
+            daarna weer aan.
+          </p>
+        )}
       </section>
       <Button variant="outline" size="lg" className="mt-6 w-full" onClick={signOut}>
         Uitloggen

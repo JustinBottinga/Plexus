@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { BookOpen, Home, Play, User } from "lucide-react";
 import { flushPending } from "@/lib/reviewWriter";
 import { ensureDevSession } from "@/lib/devLogin";
+import { useDueNotifications } from "@/lib/dueNotification";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -25,6 +26,7 @@ const tabs = [
 ] as const;
 
 function AppShell() {
+  useDueNotifications();
   // Ratings that could not be saved earlier (offline, closed tab) are retried when the app opens or reconnects
   useEffect(() => {
     void flushPending();

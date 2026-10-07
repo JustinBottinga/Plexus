@@ -236,7 +236,8 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
               onChange={(m, c) => { setMarker(m); setCovers(c); }}
             />
             <p className="mt-2 text-xs opacity-75">
-              {mode === "marker" ? "Sleep over de afbeelding om de markering te tekenen. Sleep om te verplaatsen, gebruik de hoek om het formaat te wijzigen." : "Sleep over gedrukte labels om ze af te dekken."}
+              {mode === "marker" ? "Sleep over de afbeelding om de markering te tekenen. Sleep om te verplaatsen, gebruik de hoek om het formaat te wijzigen." : "Sleep over gedrukte labels om ze af te dekken."}{" "}
+              Je kunt ook een nieuwe afbeelding plakken met Ctrl+V om de huidige te vervangen.
             </p>
           </>
         )}

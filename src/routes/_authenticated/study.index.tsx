@@ -13,7 +13,6 @@ import {
   type StudyMode,
   type StudySettings,
 } from "@/lib/studySettings";
-import { DoodleCluster } from "@/components/Doodles";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -53,6 +52,12 @@ function StudySetup() {
   const navigate = useNavigate();
   const { data, isLoading } = useQuery(studyDataQuery);
   const [s, setS] = useState<StudySettings>(loadSettings);
+  // The bounce only plays for a choice made on this screen, not for what was already selected on arrival
+  const [touched, setTouched] = useState(false);
+  const change = (next: StudySettings) => {
+    setTouched(true);
+    setS(next);
+  };
   useEffect(() => saveSettings(s), [s]);
   // Deliberately not remembered: tomorrow the setup starts on the normal schedule again
   const [practice, setPractice] = useState(false);
@@ -80,12 +85,12 @@ function StudySetup() {
     const firstWithDue = cats.find((c) => (summary?.byCategory.get(c.id)?.due ?? 0) > 0) ?? cats[0];
     const categories =
       mode === "one" ? (keep[0] ? [keep[0]] : firstWithDue ? [firstWithDue.id] : []) : keep;
-    setS({ ...s, mode, categories });
+    change({ ...s, mode, categories });
   }
 
   function toggle(id: string) {
-    if (s.mode === "one") return setS({ ...s, categories: [id] });
-    setS({
+    if (s.mode === "one") return change({ ...s, categories: [id] });
+    change({
       ...s,
       categories: s.categories.includes(id)
         ? s.categories.filter((c) => c !== id)
@@ -101,7 +106,7 @@ function StudySetup() {
       <p className="mt-1 text-sm text-muted-foreground">Kies wat je vandaag wilt oefenen.</p>
 
       <div role="radiogroup" aria-label="Wat wil je leren" className="mt-6 grid gap-3">
-        {MODES.map(({ key, title, text, icon: Icon, bg }, modeIndex) => {
+        {MODES.map(({ key, title, text, icon: Icon, bg }) => {
           const on = s.mode === key;
           return (
             <button
@@ -113,11 +118,10 @@ function StudySetup() {
                 "tile relative flex min-h-24 items-center gap-4 overflow-hidden p-5 text-left text-on-pastel",
                 bg,
                 on
-                  ? "pop ring-[3px] ring-foreground ring-offset-2 ring-offset-background"
+                  ? cn(touched && "pop", "ring-[3px] ring-foreground ring-offset-2 ring-offset-background")
                   : "opacity-90",
               )}
             >
-              <DoodleCluster index={modeIndex + 1} className="-translate-x-12 opacity-30" />
               <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-pastel-surface/60">
                 <Icon className="size-5" />
               </span>
@@ -154,7 +158,7 @@ function StudySetup() {
                   className={cn(
                     "flex h-12 items-center gap-2 rounded-full border-2 pl-5 pr-2 text-sm font-semibold text-on-pastel transition-transform active:scale-95",
                     colorOf(c.color).bg,
-                    on ? "pop border-foreground" : "border-transparent",
+                    on ? cn(touched && "pop", "border-foreground") : "border-transparent",
                   )}
                 >
                   {c.name}
@@ -190,11 +194,11 @@ function StudySetup() {
               key={key}
               role="radio"
               aria-checked={s.direction === key}
-              onClick={() => setS({ ...s, direction: key })}
+              onClick={() => change({ ...s, direction: key })}
               className={cn(
                 "flex h-12 items-center justify-center rounded-full px-2 text-sm font-semibold transition-colors",
                 s.direction === key
-                  ? "pop bg-primary text-primary-foreground"
+                  ? cn(touched && "pop", "bg-primary text-primary-foreground")
                   : "text-muted-foreground",
               )}
             >
@@ -238,7 +242,7 @@ function StudySetup() {
             max={30}
             step={1}
             value={s.newLimit}
-            onChange={(e) => setS({ ...s, newLimit: Number(e.target.value) })}
+            onChange={(e) => change({ ...s, newLimit: Number(e.target.value) })}
             className="mt-1 h-12 w-full cursor-pointer accent-[var(--foreground)]"
           />
         </section>

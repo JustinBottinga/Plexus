@@ -263,7 +263,7 @@ export function StudySession({
           <div
             key={`${card.id}-${idx}`}
             className={cn(
-              "relative animate-in fade-in zoom-in-95 duration-300",
+              "relative animate-in fade-in duration-200",
               // A slight tilt, but not while tapping: tap coordinates need an upright image
               direction === "image" && "-rotate-1",
             )}

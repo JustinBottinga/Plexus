@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Check, Flame, List, Play, Plus, Search } from "lucide-react";
+import { Check, Flame, List, Play, Plus } from "lucide-react";
 import { activityQuery, categoriesQuery, profileQuery, studyDataQuery } from "@/lib/data";
 import { activeDays, currentStreak, weekStrip } from "@/lib/activity";
 import { summarize } from "@/lib/queue";
@@ -8,7 +8,6 @@ import { todayLocal } from "@/lib/srs";
 import { loadSettings, sessionSearch } from "@/lib/studySettings";
 import { colorOf } from "@/lib/palette";
 import { CategoryDialog } from "@/components/CategoryDialog";
-import { Doodle, DoodleCluster, type DoodleName } from "@/components/Doodles";
 import { EmptyState } from "@/components/EmptyState";
 import { ProgressRing } from "@/components/ProgressRing";
 import { cn } from "@/lib/utils";
@@ -17,8 +16,6 @@ export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Start — Plexus" }, { name: "description", content: "Je anatomie-flashcards." }, { property: "og:title", content: "Start — Plexus" }, { property: "og:description", content: "Je anatomie-flashcards." }] }),
   component: HomePage,
 });
-
-const WATERMARKS: DoodleName[] = ["bone", "heart", "eye", "hand", "cube", "pencil"];
 
 function HomePage() {
   const { data: me } = useQuery(profileQuery);
@@ -56,13 +53,7 @@ function HomePage() {
         </Link>
       </div>
 
-      <label className="mt-6 flex h-12 items-center gap-3 rounded-full border bg-card px-5 text-muted-foreground">
-        <Search className="size-4" />
-        <input className="flex-1 bg-transparent text-sm outline-none" placeholder="Zoeken…" disabled />
-      </label>
-
-      <div className="tile tile-lift relative mt-5 flex min-h-56 flex-col justify-between overflow-hidden bg-butter p-6 text-on-pastel">
-        <DoodleCluster index={0} />
+      <div className="tile relative mt-6 flex min-h-56 flex-col justify-between overflow-hidden bg-butter p-6 text-on-pastel">
         <Link
           to={canStudy ? "/study/session" : "/study"}
           {...(canStudy ? { search: sessionSearch(settings) } : {})}
@@ -142,16 +133,11 @@ function HomePage() {
             <div
               key={c.id}
               className={cn(
-                "tile tile-lift relative flex flex-col justify-between gap-4 overflow-hidden p-5 text-on-pastel",
+                "tile relative flex flex-col justify-between gap-4 overflow-hidden p-5 text-on-pastel",
                 colorOf(c.color).bg,
                 wide ? "col-span-2 min-h-44" : "min-h-48",
               )}
             >
-              {wide ? (
-                <DoodleCluster index={i + 1} className="inset-auto bottom-2 right-[5.5rem] top-auto h-28 w-40 opacity-60" />
-              ) : (
-                <Doodle name={WATERMARKS[(i + 2) % WATERMARKS.length]!} className="pointer-events-none absolute -bottom-3 -right-3 size-24 rotate-6 opacity-25" />
-              )}
               {/* Stretched link: the whole tile starts a session for this category */}
               <Link
                 to="/study/session"

@@ -4,13 +4,10 @@ import { ArrowLeft, Pencil, Plus, RotateCcw, Share2, Trash2 } from "lucide-react
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { cardsQuery, categoriesQuery, useSignedUrl, type Card } from "@/lib/data";
-import { colorOf, PALETTE } from "@/lib/palette";
-
-const PALETTE_ORDER: string[] = PALETTE.map((p) => p.key);
+import { colorOf } from "@/lib/palette";
 import { loadSettings, sessionSearch } from "@/lib/studySettings";
 import { CategoryDialog } from "@/components/CategoryDialog";
 import { ShareCategoryDialog } from "@/components/ShareCategoryDialog";
-import { DoodleCluster } from "@/components/Doodles";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,7 +42,6 @@ function CategoryPage() {
   return (
     <div>
       <div className={`relative overflow-hidden rounded-b-[36px] px-5 pb-8 pt-8 text-on-pastel ${color.bg}`}>
-        <DoodleCluster index={Math.max(0, PALETTE_ORDER.indexOf(color.key))} className="inset-auto bottom-3 right-0 top-auto h-28 w-44 opacity-50" />
         <div className="flex items-center justify-between">
           <Link to="/home" className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60"><ArrowLeft className="size-5" /></Link>
           <div className="flex gap-2">
@@ -106,7 +102,7 @@ function CategoryPage() {
 function CardTile({ card, bg }: { card: Card; bg: string }) {
   const { data: url } = useSignedUrl(card.image_path);
   return (
-    <Link to="/cards/$id" params={{ id: card.id }} className={`tile tile-lift overflow-hidden p-2 text-on-pastel ${bg}`}>
+    <Link to="/cards/$id" params={{ id: card.id }} className={`tile overflow-hidden p-2 text-on-pastel ${bg}`}>
       <div className="aspect-square overflow-hidden rounded-[22px] bg-stage">
         {url && <img src={url} alt={card.name_nl} className="size-full object-contain" loading="lazy" />}
       </div>

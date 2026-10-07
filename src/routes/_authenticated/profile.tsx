@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,6 +28,8 @@ function Profile() {
   const navigate = useNavigate();
   const name = data?.profile?.display_name ?? "";
   const { pref, set } = useTheme();
+  // The bounce only plays for a click on this screen, not for the theme that was already active
+  const [touched, setTouched] = useState(false);
   const notify = useDueNotificationPref();
 
   async function signOut() {
@@ -57,10 +60,13 @@ function Profile() {
               key={key}
               role="radio"
               aria-checked={pref === key}
-              onClick={() => set(key)}
+              onClick={() => {
+                setTouched(true);
+                set(key);
+              }}
               className={cn(
                 "flex h-12 items-center justify-center gap-2 rounded-full text-sm font-semibold transition-transform active:scale-95",
-                pref === key ? "pop bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground",
+                pref === key ? cn(touched && "pop", "bg-primary text-primary-foreground") : "bg-secondary text-secondary-foreground",
               )}
             >
               <Icon className="size-4" /> {label}

@@ -92,7 +92,7 @@ export function SummaryScreen({
   const reviewed = RATINGS.reduce((n, r) => n + counts[r], 0);
   return (
     <Shell colorKey={colorKey}>
-      <div className="tile animate-in fade-in zoom-in-95 bg-pastel-surface/45 px-6 py-8 text-center duration-500">
+      <div className="tile bg-pastel-surface/45 px-6 py-8 text-center">
         <EmptyState onPastel drawing="star" color="bg-pastel-surface/70" title="Sessie voltooid" className="p-0" />
         <p className="mt-5 text-sm opacity-80">
           <span className="font-display text-5xl font-semibold tabular-nums">{reviewed}</span>

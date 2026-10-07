@@ -36,7 +36,7 @@ function AppShell() {
 
   return (
     <div className="mx-auto min-h-screen max-w-2xl pb-28">
-      <div aria-hidden="true" className="page-wash pointer-events-none fixed inset-0 -z-10" />
+      <div aria-hidden="true" className="plus-grid pointer-events-none fixed inset-0 -z-10" />
       <Outlet />
       <nav className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-2xl px-4 pb-4">
         <div className="flex items-center justify-around rounded-full border bg-card/90 p-2 shadow-lg backdrop-blur">
@@ -46,7 +46,7 @@ function AppShell() {
               to={t.to}
               aria-label={t.label}
               className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-sm font-semibold text-muted-foreground transition-colors"
-              activeProps={{ className: "pop bg-butter text-on-pastel" }}
+              activeProps={{ className: "bg-butter text-on-pastel" }}
             >
               <t.icon className="size-5" />
               <span className="hidden sm:inline">{t.label}</span>

@@ -1,6 +1,6 @@
 ## Design language: "Soft Tactile Bento" (v2)
 
-Reference: the attached screenshots (pastel color-blocking, big rounded tiles, one-line doodles, progress rings, black pill buttons). Plexus is a calm study app: bright enough to feel alive, quiet enough to look at an anatomy plate for ten minutes.
+Reference: the attached screenshots (pastel color-blocking, big rounded tiles, progress rings, black pill buttons). Plexus is a calm study app: bright enough to feel alive, quiet enough to look at an anatomy plate for ten minutes.
 
 ### The one hard rule
 **A category color never touches a photo.** Anatomy plates and photos always sit on a neutral white stage (`bg-stage`, `--stage: #fff`, in light and dark mode). The category color lives *around* the image: the screen background, the tile frame, the header. No tint, no `mix-blend-mode`, no overlay on the image itself.
@@ -12,9 +12,8 @@ Reference: the attached screenshots (pastel color-blocking, big rounded tiles, o
 - Neutrals: warm off-white (#FAF8F3) in light mode, near-black (#141414) in dark mode. The primary action is always a black pill (white pill in dark mode).
 - Dark text on every pastel (`on-pastel`), never white. Contrast must meet WCAG AA.
 
-### Not a flat sheet: depth and life
-- **Page wash:** a very soft pastel glow behind the app screens (`page-wash`: periwinkle top right, butter left, mint bottom right). Never strong enough to compete with tiles.
-- **Doodles:** one-line drawings (bone, heart, eye, hand, cube, pencil, ruler, sparkles) on pastel tiles, 2.6px stroke, `currentColor`, 25–70% opacity, always decorative (`aria-hidden`, behind the content, never interactive). Wide tiles get a small scatter (`DoodleCluster`), narrow tiles a large faint watermark in the corner.
+### Not a flat sheet
+- **Plus grid:** a quiet grid of small "+" signs behind the app screens (`plus-grid`, 7% of the text color, 32px apart). No blurs, no gradients.
 - **Progress rings:** circular progress with a number in the middle (`ProgressRing`). Hero tile: cards done today out of done + due. Category tile: share of the category that is up to date.
 - **Week strip:** Monday to Sunday dots: ink with a check for a practised day, a peach ring for today, dashed for days to come. Next to it the real streak, counted from the review log.
 - Paper grain stays at 2–3% on colored backgrounds.
@@ -23,7 +22,7 @@ Reference: the attached screenshots (pastel color-blocking, big rounded tiles, o
 - Radius is generous everywhere: tiles 28–32px, chips and buttons fully pill-shaped.
 - Home is a bento: a large pastel "Verder leren" hero with a black "Start nu" pill and a ring, the week strip, then category tiles in their own colors (the first one full width, then pairs).
 - Card tiles in a category: the tile is the category color, the photo sits inset on its own white stage with a rounded frame, the name below in display type.
-- Rounded search pill at the top with the "Hoi, [name]!" greeting and a one-line status under it.
+- The home header is the "Hoi, [name]!" greeting with a one-line status under it. There is no search bar until search actually works.
 - Bottom tab bar with 4 icons: Home, Study, Library, Profile.
 - Info that would be a wall of text goes behind a small info icon (`InfoHint`): shown on hover, kept open on click or tap.
 
@@ -39,11 +38,13 @@ Reference: the attached screenshots (pastel color-blocking, big rounded tiles, o
 - Latin names in italic, secondary color.
 
 ### Motion
-- Springy micro-interactions: tiles scale on press, pills bounce on select, rings and progress bars fill with easing.
+- Motion confirms a choice; it never decorates a page that just opened. Pills bounce (`pop`) only after the user picks them on that screen, not for what was already selected on arrival. Navigation never bounces the tab bar.
+- No hover animations: no lift, no scale. Press feedback (tiles scale slightly while pressed) stays.
+- Rings and progress bars fill with easing when their value changes. Entrances are a short fade at most, never a zoom.
 - Respect `prefers-reduced-motion`.
 
 ### Illustration and empty states
-- Empty states use simple black line drawings on colored circles.
+- Empty states use simple black line drawings on colored circles. They are the only illustrations; tiles carry no decoration.
 - Dashboard chart (later): soft rounded bars per day, bar color is the category color of that day's study.
 
 ### Dark mode
@@ -51,6 +52,6 @@ Reference: the attached screenshots (pastel color-blocking, big rounded tiles, o
 - Follow the system setting with a manual toggle.
 
 ### Accessibility
-- Contrast meets WCAG AA on every pastel background. Decorative doodles never carry meaning and stay faint behind text.
+- Contrast meets WCAG AA on every pastel background. The plus grid is decorative and faint.
 - Tap targets are at least 48px (info buttons, list buttons, pills).
 - Every ring and week dot has a text alternative.

@@ -14,12 +14,15 @@ create table if not exists public.category_invites (
 grant select, insert, update on public.category_invites to authenticated;
 grant all on public.category_invites to service_role;
 alter table public.category_invites enable row level security;
+drop policy if exists "own invites select" on public.category_invites;
 create policy "own invites select" on public.category_invites for select to authenticated using (auth.uid() = user_id);
+drop policy if exists "own invites insert" on public.category_invites;
 create policy "own invites insert" on public.category_invites for insert to authenticated
   with check (
     auth.uid() = user_id
     and exists (select 1 from public.categories c where c.id = category_id and c.user_id = auth.uid())
   );
+drop policy if exists "own invites update" on public.category_invites;
 create policy "own invites update" on public.category_invites for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create index if not exists category_invites_category_idx on public.category_invites(category_id);
 
@@ -37,6 +40,7 @@ create table if not exists public.category_shares (
 grant select on public.category_shares to authenticated;
 grant all on public.category_shares to service_role;
 alter table public.category_shares enable row level security;
+drop policy if exists "own shares" on public.category_shares;
 create policy "own shares" on public.category_shares for select to authenticated using (auth.uid() = recipient_id);
 
 -- What the invite page shows before the recipient accepts
@@ -135,5 +139,6 @@ $$;
 revoke all on function public.can_read_shared_image(text) from public, anon;
 grant execute on function public.can_read_shared_image(text) to authenticated;
 
+drop policy if exists "shared images read" on storage.objects;
 create policy "shared images read" on storage.objects for select to authenticated
   using (bucket_id = 'card-images' and public.can_read_shared_image(name));

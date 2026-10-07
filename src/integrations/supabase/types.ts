@@ -27,7 +27,6 @@ export type Database = {
           image_source: string | null
           innervation: string | null
           insertion: string | null
-          is_public: boolean
           marker: Json | null
           name_latin: string | null
           name_nl: string
@@ -47,7 +46,6 @@ export type Database = {
           image_source?: string | null
           innervation?: string | null
           insertion?: string | null
-          is_public?: boolean
           marker?: Json | null
           name_latin?: string | null
           name_nl: string
@@ -67,7 +65,6 @@ export type Database = {
           image_source?: string | null
           innervation?: string | null
           insertion?: string | null
-          is_public?: boolean
           marker?: Json | null
           name_latin?: string | null
           name_nl?: string
@@ -126,79 +123,6 @@ export type Database = {
           id?: string
         }
         Relationships: []
-      }
-      review_log: {
-        Row: {
-          card_id: string
-          direction: string
-          id: string
-          rating: string
-          reviewed_at: string
-          user_id: string
-        }
-        Insert: {
-          card_id: string
-          direction: string
-          id?: string
-          rating: string
-          reviewed_at?: string
-          user_id?: string
-        }
-        Update: {
-          card_id?: string
-          direction?: string
-          id?: string
-          rating?: string
-          reviewed_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "review_log_card_id_fkey"
-            columns: ["card_id"]
-            isOneToOne: false
-            referencedRelation: "cards"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      reviews: {
-        Row: {
-          card_id: string
-          due_date: string
-          ease_factor: number
-          interval_days: number
-          last_reviewed: string | null
-          repetitions: number
-          user_id: string
-        }
-        Insert: {
-          card_id: string
-          due_date?: string
-          ease_factor?: number
-          interval_days?: number
-          last_reviewed?: string | null
-          repetitions?: number
-          user_id?: string
-        }
-        Update: {
-          card_id?: string
-          due_date?: string
-          ease_factor?: number
-          interval_days?: number
-          last_reviewed?: string | null
-          repetitions?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reviews_card_id_fkey"
-            columns: ["card_id"]
-            isOneToOne: false
-            referencedRelation: "cards"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {

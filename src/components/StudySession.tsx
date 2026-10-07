@@ -219,7 +219,7 @@ export function StudySession({
           type="button"
           onClick={() => setConfirmClose(true)}
           aria-label="Sessie sluiten"
-          className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/60 transition-transform active:scale-90"
+          className="flex size-12 shrink-0 items-center justify-center rounded-full bg-pastel-surface/60 transition-transform active:scale-90"
         >
           <X className="size-5" />
         </button>
@@ -228,7 +228,7 @@ export function StudySession({
           aria-valuemin={0}
           aria-valuemax={queue.length}
           aria-valuenow={idx}
-          className="h-2.5 flex-1 overflow-hidden rounded-full bg-white/50"
+          className="h-2.5 flex-1 overflow-hidden rounded-full bg-pastel-surface/50"
         >
           <div className="h-full rounded-full bg-on-pastel transition-[width] duration-700 ease-out" style={{ width: `${(idx / queue.length) * 100}%` }} />
         </div>
@@ -241,14 +241,14 @@ export function StudySession({
         {direction === "location" && (
           <div className="mb-3 px-1">
             <h1 className="font-display text-3xl font-semibold leading-tight">{card.name_nl}</h1>
-            {card.name_latin && <p className="text-lg italic opacity-80">{card.name_latin}</p>}
+            {card.name_latin && <p className="text-lg italic text-on-pastel-muted">{card.name_latin}</p>}
           </div>
         )}
         <div className="relative">
           {hasNext && (
             <>
-              <div aria-hidden className="absolute inset-x-2 inset-y-3 rotate-3 rounded-[32px] bg-white/35" />
-              <div aria-hidden className="absolute inset-x-3 inset-y-2 -rotate-3 rounded-[32px] bg-white/25" />
+              <div aria-hidden className="absolute inset-x-2 inset-y-3 rotate-3 rounded-[32px] bg-pastel-surface/35" />
+              <div aria-hidden className="absolute inset-x-3 inset-y-2 -rotate-3 rounded-[32px] bg-pastel-surface/25" />
             </>
           )}
           <div
@@ -294,7 +294,7 @@ export function StudySession({
               <button
                 type="button"
                 onClick={() => setRevealed(true)}
-                className="flex h-12 items-center rounded-full bg-white/60 px-6 text-sm font-semibold transition-transform active:scale-95"
+                className="flex h-12 items-center rounded-full bg-pastel-surface/60 px-6 text-sm font-semibold transition-transform active:scale-95"
               >
                 Ik weet het niet
               </button>

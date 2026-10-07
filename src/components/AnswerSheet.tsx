@@ -2,6 +2,7 @@ import { Frown, Laugh, Meh, Smile } from "lucide-react";
 import { formatInterval, RATINGS, type Rating } from "@/lib/srs";
 import type { Card } from "@/lib/data";
 import type { ColorKey } from "@/lib/palette";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const RATING_META: Record<Rating, { label: string; icon: typeof Frown; deepShare: number }> = {
@@ -48,7 +49,7 @@ export function AnswerSheet({
       <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-muted-foreground/30" />
       <div className="max-h-[26svh] overflow-y-auto pr-1">
         {verdict && (
-          <p className={cn("mb-1 text-sm font-semibold", verdict === "right" ? "text-emerald-700 dark:text-emerald-300" : "text-rose-700 dark:text-rose-300")}>
+          <p className={cn("mb-1 text-sm font-semibold", verdict === "right" ? "text-success" : "text-error")}>
             {verdict === "right" ? "Je had het gevonden!" : "Net niet. Kijk naar de markering."}
           </p>
         )}
@@ -72,7 +73,7 @@ export function AnswerSheet({
           const { label, icon: Icon } = RATING_META[r];
           return (
             <div key={r}>
-              <button
+              <Button
                 type="button"
                 onClick={() => onRate(r)}
                 aria-keyshortcuts={String(i + 1)}
@@ -84,7 +85,7 @@ export function AnswerSheet({
               >
                 <Icon className="size-4 shrink-0" />
                 {label}
-              </button>
+              </Button>
               <p className="mt-1.5 text-center text-xs tabular-nums text-muted-foreground">{formatInterval(intervals[r])}</p>
             </div>
           );

@@ -30,8 +30,9 @@ export function ErrorScreen({ onRetry }: { onRetry: () => void }) {
   return (
     <Shell colorKey="peach">
       <EmptyState
+        onPastel
         drawing="cards"
-        color="bg-white/60"
+        color="bg-pastel-surface/60"
         title="Kaarten laden mislukt"
         text="Controleer je verbinding en probeer het opnieuw."
         action={<Button size="lg" onClick={onRetry}>Opnieuw proberen</Button>}
@@ -44,8 +45,9 @@ export function CaughtUpScreen({ onMore }: { onMore?: () => void }) {
   return (
     <Shell colorKey="mint">
       <EmptyState
+        onPastel
         drawing="check"
-        color="bg-white/60"
+        color="bg-pastel-surface/60"
         title="Helemaal bij"
         text="Er staat nu niets klaar. Kom later terug of voeg nieuwe kaarten toe."
         action={
@@ -54,11 +56,11 @@ export function CaughtUpScreen({ onMore }: { onMore?: () => void }) {
               <Link to="/home">Terug naar start</Link>
             </Button>
             {onMore ? (
-              <Button size="lg" variant="outline" className="border-0 bg-white/60" onClick={onMore}>
+              <Button size="lg" variant="pastel" onClick={onMore}>
                 Opnieuw controleren
               </Button>
             ) : (
-              <Button asChild size="lg" variant="outline" className="border-0 bg-white/60">
+              <Button asChild size="lg" variant="pastel">
                 <Link to="/study">Sessie aanpassen</Link>
               </Button>
             )}
@@ -90,8 +92,8 @@ export function SummaryScreen({
   const reviewed = RATINGS.reduce((n, r) => n + counts[r], 0);
   return (
     <Shell colorKey={colorKey}>
-      <div className="tile animate-in fade-in zoom-in-95 bg-white/45 px-6 py-8 text-center duration-500">
-        <EmptyState drawing="star" color="bg-white/70" title="Sessie voltooid" className="p-0" />
+      <div className="tile animate-in fade-in zoom-in-95 bg-pastel-surface/45 px-6 py-8 text-center duration-500">
+        <EmptyState onPastel drawing="star" color="bg-pastel-surface/70" title="Sessie voltooid" className="p-0" />
         <p className="mt-5 text-sm opacity-80">
           <span className="font-display text-5xl font-semibold tabular-nums">{reviewed}</span>
           <br />
@@ -118,7 +120,7 @@ export function SummaryScreen({
           <Button asChild size="lg">
             <Link to="/home">Terug naar start</Link>
           </Button>
-          <Button size="lg" variant="outline" className="border-0 bg-white/60" onClick={onMore}>
+          <Button size="lg" variant="pastel" onClick={onMore}>
             Nog meer leren
           </Button>
         </div>

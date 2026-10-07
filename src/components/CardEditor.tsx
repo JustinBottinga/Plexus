@@ -30,8 +30,8 @@ const schema = z.object({
   category_id: z.string().uuid("Kies een categorie"),
 });
 
-const field = "h-12 rounded-full border-on-pastel/10 bg-white/70 px-5 text-on-pastel placeholder:text-on-pastel/60";
-const area = "rounded-[22px] border-on-pastel/10 bg-white/70 px-5 py-3 text-on-pastel placeholder:text-on-pastel/60";
+const field = "h-12 rounded-full border-on-pastel/10 bg-pastel-surface/70 px-5 text-on-pastel placeholder:text-on-pastel-muted";
+const area = "rounded-[22px] border-on-pastel/10 bg-pastel-surface/70 px-5 py-3 text-on-pastel placeholder:text-on-pastel-muted";
 
 export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCategory?: string }) {
   const navigate = useNavigate();
@@ -158,13 +158,13 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
   return (
     <div className={cn("min-h-screen px-5 pb-10 pt-8 text-on-pastel transition-colors", color.bg)}>
       <div className="flex items-center justify-between">
-        <button onClick={() => history.back()} className="flex size-12 items-center justify-center rounded-full bg-white/60" aria-label="Terug">
+        <button onClick={() => history.back()} className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60" aria-label="Terug">
           <ArrowLeft className="size-5" />
         </button>
         {card && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="flex size-12 items-center justify-center rounded-full bg-white/60" aria-label="Kaart verwijderen">
+              <button className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60" aria-label="Kaart verwijderen">
                 <Trash2 className="size-4" />
               </button>
             </AlertDialogTrigger>
@@ -192,7 +192,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
               key={c.id}
               type="button"
               onClick={() => setF({ ...f, category_id: c.id })}
-              className={cn("flex h-12 items-center rounded-full border-2 px-5 text-sm font-medium transition-transform", colorOf(c.color).bg, f.category_id === c.id ? "pop border-on-pastel" : "border-white/70")}
+              className={cn("flex h-12 items-center rounded-full border-2 px-5 text-sm font-medium transition-transform", colorOf(c.color).bg, f.category_id === c.id ? "pop border-on-pastel" : "border-pastel-surface/70")}
             >
               {c.name}
             </button>
@@ -206,23 +206,23 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={(e) => { e.preventDefault(); setDragOver(false); pick(e.dataTransfer.files[0]); }}
-            className={cn("tile flex aspect-[4/3] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-on-pastel/25 bg-white/50", dragOver && "bg-white/80")}
+            className={cn("tile flex aspect-[4/3] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-on-pastel/25 bg-pastel-surface/50", dragOver && "bg-pastel-surface/80")}
           >
             <ImagePlus className="size-8" />
             <span className="mt-2 font-semibold">Sleep een afbeelding hierheen, plak met Ctrl+V of klik om te uploaden</span>
-            <span className="text-xs opacity-75">PNG of JPG, maximaal 10 MB</span>
+            <span className="text-xs text-on-pastel-muted">PNG of JPG, maximaal 10 MB</span>
             <input type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />
           </label>
         ) : (
           <>
             <div className="mb-3 flex flex-wrap items-center gap-2">
-              <button type="button" onClick={() => setMode("marker")} className={cn("flex h-12 items-center gap-2 rounded-full px-5 text-sm font-semibold", mode === "marker" ? "pop bg-primary text-primary-foreground" : "bg-white/60")}>
+              <button type="button" onClick={() => setMode("marker")} className={cn("flex h-12 items-center gap-2 rounded-full px-5 text-sm font-semibold", mode === "marker" ? "pop bg-primary text-primary-foreground" : "bg-pastel-surface/60")}>
                 <Square className="size-4" /> Markeren
               </button>
-              <button type="button" onClick={() => setMode("cover")} className={cn("flex h-12 items-center gap-2 rounded-full px-5 text-sm font-semibold", mode === "cover" ? "pop bg-primary text-primary-foreground" : "bg-white/60")}>
+              <button type="button" onClick={() => setMode("cover")} className={cn("flex h-12 items-center gap-2 rounded-full px-5 text-sm font-semibold", mode === "cover" ? "pop bg-primary text-primary-foreground" : "bg-pastel-surface/60")}>
                 <SquareDashed className="size-4" /> Labels afdekken
               </button>
-              <label className="ml-auto flex h-12 cursor-pointer items-center rounded-full bg-white/60 px-5 text-sm font-semibold">
+              <label className="ml-auto flex h-12 cursor-pointer items-center rounded-full bg-pastel-surface/60 px-5 text-sm font-semibold">
                 Vervangen
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />
               </label>
@@ -235,7 +235,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
               coverClass={color.deep}
               onChange={(m, c) => { setMarker(m); setCovers(c); }}
             />
-            <p className="mt-2 text-xs opacity-75">
+            <p className="mt-2 text-xs text-on-pastel-muted">
               {mode === "marker" ? "Sleep over de afbeelding om de markering te tekenen. Sleep om te verplaatsen, gebruik de hoek om het formaat te wijzigen." : "Sleep over gedrukte labels om ze af te dekken."}{" "}
               Je kunt ook een nieuwe afbeelding plakken met Ctrl+V om de huidige te vervangen.
             </p>

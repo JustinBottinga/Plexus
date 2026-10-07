@@ -41,6 +41,7 @@ export function EmptyState({
   text,
   action,
   className,
+  onPastel = false,
 }: {
   drawing: DrawingName;
   /** Tailwind background class of the circle, e.g. `bg-butter` */
@@ -49,6 +50,7 @@ export function EmptyState({
   text?: string;
   action?: ReactNode;
   className?: string;
+  onPastel?: boolean;
 }) {
   return (
     <div className={cn("flex flex-col items-center px-6 py-10 text-center", className)}>
@@ -67,7 +69,7 @@ export function EmptyState({
         </svg>
       </div>
       <p className="mt-5 font-display text-xl font-semibold">{title}</p>
-      {text && <p className="mt-1 max-w-xs text-sm text-muted-foreground">{text}</p>}
+      {text && <p className={cn("mt-1 max-w-xs text-sm", onPastel ? "text-on-pastel-muted" : "text-muted-foreground")}>{text}</p>}
       {action && <div className="mt-5">{action}</div>}
     </div>
   );

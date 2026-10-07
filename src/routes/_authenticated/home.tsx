@@ -11,7 +11,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/home")({
-  head: () => ({ meta: [{ title: "Start — Anatomie" }, { name: "description", content: "Je anatomie-flashcards." }, { property: "og:title", content: "Start — Anatomie" }, { property: "og:description", content: "Je anatomie-flashcards." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Start — Anatomie" }, { name: "description", content: "Je anatomie-flashcards." }, { property: "og:title", content: "Start — Anatomie" }, { property: "og:description", content: "Je anatomie-flashcards." }] }),
   component: HomePage,
 });
 
@@ -97,10 +97,10 @@ function HomePage() {
               />
               <p className="pointer-events-none pr-12 font-display text-xl font-semibold leading-tight">{c.name}</p>
               <div className="pointer-events-none flex flex-wrap gap-2">
-                <span className={cn("rounded-full px-3 py-1.5 text-xs font-semibold", startable ? "bg-ink text-ink-foreground" : "bg-white/60")}>
+                <span className={cn("rounded-full px-3 py-1.5 text-xs font-semibold", startable ? "bg-ink text-ink-foreground" : "bg-pastel-surface/60")}>
                   {dueHere} te doen
                 </span>
-                <span className="rounded-full bg-white/60 px-3 py-1.5 text-xs font-medium">
+                <span className="rounded-full bg-pastel-surface/60 px-3 py-1.5 text-xs font-medium">
                   {c.count} {c.count === 1 ? "kaart" : "kaarten"}
                 </span>
               </div>
@@ -108,7 +108,7 @@ function HomePage() {
                 to="/categories/$id"
                 params={{ id: c.id }}
                 aria-label={`Open kaarten van ${c.name}`}
-                className="absolute right-3 top-3 flex size-12 items-center justify-center rounded-full bg-white/60 transition-transform active:scale-90"
+                className="absolute right-3 top-3 flex size-12 items-center justify-center rounded-full bg-pastel-surface/60 transition-transform active:scale-90"
               >
                 <List className="size-4" />
               </Link>

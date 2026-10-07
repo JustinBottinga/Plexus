@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/study/session")({
     dir: z.enum(["image", "location"]).catch("image"),
     new: z.coerce.number().int().min(0).max(30).catch(10),
   }),
-  head: () => ({ meta: [{ title: "Leren — Anatomie" }, { name: "description", content: "Leersessie." }, { property: "og:title", content: "Leren — Anatomie" }, { property: "og:description", content: "Leersessie." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Leersessie — Anatomie" }, { name: "description", content: "Leersessie." }, { property: "og:title", content: "Leersessie — Anatomie" }, { property: "og:description", content: "Leersessie." }] }),
   component: SessionPage,
 });
 

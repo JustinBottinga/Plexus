@@ -109,6 +109,63 @@ export type Database = {
         }
         Relationships: []
       }
+      category_invites: {
+        Row: {
+          category_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          revoked_at: string | null
+          token: string
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          revoked_at?: string | null
+          token?: string
+          user_id?: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          revoked_at?: string | null
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      category_shares: {
+        Row: {
+          copied_category_id: string
+          created_at: string
+          id: string
+          invite_id: string | null
+          recipient_id: string
+          source_category_id: string
+        }
+        Insert: {
+          copied_category_id: string
+          created_at?: string
+          id?: string
+          invite_id?: string | null
+          recipient_id: string
+          source_category_id: string
+        }
+        Update: {
+          copied_category_id?: string
+          created_at?: string
+          id?: string
+          invite_id?: string | null
+          recipient_id?: string
+          source_category_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -205,7 +262,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      accept_invite: { Args: { p_token: string }; Returns: string }
+      can_read_shared_image: { Args: { p_path: string }; Returns: boolean }
+      invite_preview: {
+        Args: { p_token: string }
+        Returns: {
+          card_count: number
+          category_color: string
+          category_name: string
+          copied_category_id: string | null
+          is_owner: boolean
+          owner_name: string | null
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

@@ -29,6 +29,13 @@
       "when": 1791391767236,
       "tag": "0003_reviews_public_bucket",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791402440112,
+      "tag": "0004_category_invites",
+      "breakpoints": true
     }
   ]
 }

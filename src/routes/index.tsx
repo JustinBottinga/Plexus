@@ -1,8 +1,9 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ensureDevSession } from "@/lib/devLogin";
+import { takeRedirect } from "@/lib/invites";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,13 +21,18 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   const navigate = useNavigate();
+  const router = useRouter();
   useEffect(() => {
     ensureDevSession()
       .then(() => supabase.auth.getSession())
       .then(({ data }) => {
-        if (data.session) navigate({ to: "/home", replace: true });
+        if (!data.session) return;
+        // Back to an invite link after the Google login, which returns here
+        const target = takeRedirect();
+        if (target) router.history.replace(target);
+        else navigate({ to: "/home", replace: true });
       });
-  }, [navigate]);
+  }, [navigate, router]);
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col px-5 py-8">

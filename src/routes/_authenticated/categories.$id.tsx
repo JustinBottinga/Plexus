@@ -1,11 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Pencil, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, Plus, RotateCcw, Share2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { cardsQuery, categoriesQuery, useSignedUrl, type Card } from "@/lib/data";
 import { colorOf } from "@/lib/palette";
+import { loadSettings, sessionSearch } from "@/lib/studySettings";
 import { CategoryDialog } from "@/components/CategoryDialog";
+import { ShareCategoryDialog } from "@/components/ShareCategoryDialog";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,6 +45,9 @@ function CategoryPage() {
         <div className="flex items-center justify-between">
           <Link to="/home" className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60"><ArrowLeft className="size-5" /></Link>
           <div className="flex gap-2">
+            {cat && !!cards?.length && (
+              <ShareCategoryDialog categoryId={id} categoryName={cat.name} trigger={<button aria-label="Delen" className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60"><Share2 className="size-4" /></button>} />
+            )}
             {cat && (
               <CategoryDialog initial={cat} trigger={<button aria-label="Bewerken" className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60"><Pencil className="size-4" /></button>} />
             )}
@@ -71,6 +76,16 @@ function CategoryPage() {
         <Button asChild size="lg" className="w-full">
           <Link to="/cards/new" search={{ category: id }}><Plus /> Nieuwe kaart</Link>
         </Button>
+        {!!cards?.length && (
+          <Button
+            size="lg"
+            variant="outline"
+            className="mt-3 w-full"
+            onClick={() => navigate({ to: "/study/session", search: sessionSearch(loadSettings(), [id], true) })}
+          >
+            <RotateCcw /> Opnieuw oefenen
+          </Button>
+        )}
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {isLoading && [0, 1, 2].map((i) => <div key={i} className="tile aspect-[4/5] animate-pulse bg-muted" />)}
           {cards?.map((c) => <CardTile key={c.id} card={c} />)}

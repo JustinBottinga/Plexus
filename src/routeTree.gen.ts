@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedCardsNewRouteImport } from './routes/_authenticated/cards.new'
 import { Route as AuthenticatedCategoriesIdRouteImport } from './routes/_authenticated/categories.$id'
 import { Route as AuthenticatedStudyIndexRouteImport } from './routes/_authenticated/study.index'
@@ -50,6 +51,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedCardsNewRoute = AuthenticatedCardsNewRouteImport.update({
   id: '/cards/new',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/cards/new': typeof AuthenticatedCardsNewRoute
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
   '/study/session': typeof AuthenticatedStudySessionRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/cards/new': typeof AuthenticatedCardsNewRoute
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
   '/study/session': typeof AuthenticatedStudySessionRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/cards/new': typeof AuthenticatedCardsNewRoute
   '/_authenticated/categories/$id': typeof AuthenticatedCategoriesIdRoute
   '/_authenticated/study/session': typeof AuthenticatedStudySessionRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/library'
     | '/profile'
+    | '/invite/$token'
     | '/cards/new'
     | '/categories/$id'
     | '/study/session'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/library'
     | '/profile'
+    | '/invite/$token'
     | '/cards/new'
     | '/categories/$id'
     | '/study/session'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/_authenticated/home'
     | '/_authenticated/library'
     | '/_authenticated/profile'
+    | '/invite/$token'
     | '/_authenticated/cards/new'
     | '/_authenticated/categories/$id'
     | '/_authenticated/study/session'
@@ -174,6 +186,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  InviteTokenRoute: typeof InviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/cards/new': {
       id: '/_authenticated/cards/new'
@@ -296,6 +316,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

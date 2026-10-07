@@ -1,13 +1,17 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ensureDevSession } from "@/lib/devLogin";
+import { rememberRedirect, safeRedirect, takeRedirect } from "@/lib/invites";
 
 export const Route = createFileRoute("/auth")({
+  // Where to go after logging in, e.g. back to an invite link
+  validateSearch: z.object({ redirect: z.string().optional().catch(undefined) }),
   head: () => ({
     meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, 
       { title: "Inloggen — Anatomie" },
@@ -21,6 +25,8 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const router = useRouter();
+  const redirect = safeRedirect(Route.useSearch().redirect);
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,17 +34,25 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
 
+  // Kept in sessionStorage so it survives the Google redirect, which leaves this page
+  useEffect(() => rememberRedirect(redirect), [redirect]);
+
   useEffect(() => {
+    const done = () => {
+      const target = takeRedirect();
+      if (target) router.history.replace(target);
+      else navigate({ to: "/home", replace: true });
+    };
     ensureDevSession()
       .then(() => supabase.auth.getSession())
       .then(({ data }) => {
-        if (data.session) navigate({ to: "/home", replace: true });
+        if (data.session) done();
       });
     const { data } = supabase.auth.onAuthStateChange((_e, s) => {
-      if (s) navigate({ to: "/home", replace: true });
+      if (s) done();
     });
     return () => data.subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, router]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/study/")({
   head: () => ({
-    meta: [
+    meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, 
       { title: "Leren — Anatomie" },
       { name: "description", content: "Start een leersessie." },
       { property: "og:title", content: "Leren — Anatomie" },
@@ -112,14 +112,14 @@ function StudySetup() {
                   : "opacity-90",
               )}
             >
-              <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/60">
+              <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-pastel-surface/60">
                 <Icon className="size-5" />
               </span>
               <span className="flex-1">
                 <span className="block font-display text-xl font-semibold leading-tight">
                   {title}
                 </span>
-                <span className="block text-sm opacity-80">{text}</span>
+                <span className="block text-sm text-on-pastel-muted">{text}</span>
               </span>
               {on && <Check className="size-5 shrink-0" />}
             </button>
@@ -153,7 +153,7 @@ function StudySetup() {
                 >
                   {c.name}
                   <span
-                    className="rounded-full bg-white/65 px-2.5 py-1 text-xs tabular-nums"
+                    className="rounded-full bg-pastel-surface/65 px-2.5 py-1 text-xs tabular-nums"
                     aria-label={`${n?.due ?? 0} te doen`}
                   >
                     {n?.due ?? 0}

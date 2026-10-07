@@ -9,7 +9,7 @@ import { ensureDevSession } from "@/lib/devLogin";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
-    meta: [
+    meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, 
       { title: "Inloggen — Anatomie" },
       { name: "description", content: "Log in op je anatomie-flashcards." },
       { property: "og:title", content: "Inloggen — Anatomie" },

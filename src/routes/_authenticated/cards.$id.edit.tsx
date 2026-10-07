@@ -4,7 +4,7 @@ import { cardQuery } from "@/lib/data";
 import { CardEditor } from "@/components/CardEditor";
 
 export const Route = createFileRoute("/_authenticated/cards/$id/edit")({
-  head: () => ({ meta: [{ title: "Kaart bewerken — Anatomie" }, { name: "description", content: "Bewerk een flashcard." }, { property: "og:title", content: "Kaart bewerken — Anatomie" }, { property: "og:description", content: "Bewerk een flashcard." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Kaart bewerken — Anatomie" }, { name: "description", content: "Bewerk een flashcard." }, { property: "og:title", content: "Kaart bewerken — Anatomie" }, { property: "og:description", content: "Bewerk een flashcard." }] }),
   component: EditCard,
 });
 

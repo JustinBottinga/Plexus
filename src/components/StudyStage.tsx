@@ -81,7 +81,7 @@ export function StudyStage({
               <span
                 className={cn(
                   "flex size-11 items-center justify-center rounded-full shadow-md",
-                  verdict === "right" ? "bg-emerald-200 text-emerald-900" : "bg-rose-200 text-rose-900",
+                  verdict === "right" ? "bg-success-surface text-on-pastel" : "bg-error-surface text-on-pastel",
                 )}
                 role="img"
                 aria-label={verdict === "right" ? "Goed" : "Niet helemaal"}
@@ -89,7 +89,7 @@ export function StudyStage({
                 {verdict === "right" ? <Check className="size-6" strokeWidth={3} /> : <X className="size-6" strokeWidth={3} />}
               </span>
             ) : (
-              <span className="block size-4 rounded-full border-2 border-white bg-on-pastel shadow" />
+              <span className="block size-4 rounded-full border-2 border-pastel-surface bg-on-pastel shadow" />
             )}
           </span>
         )}

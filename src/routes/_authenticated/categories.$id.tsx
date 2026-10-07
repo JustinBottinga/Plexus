@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_authenticated/categories/$id")({
-  head: () => ({ meta: [{ title: "Categorie — Anatomie" }, { name: "description", content: "Kaarten in deze categorie." }, { property: "og:title", content: "Categorie — Anatomie" }, { property: "og:description", content: "Kaarten in deze categorie." }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Categorie — Anatomie" }, { name: "description", content: "Kaarten in deze categorie." }, { property: "og:title", content: "Categorie — Anatomie" }, { property: "og:description", content: "Kaarten in deze categorie." }] }),
   component: CategoryPage,
 });
 
@@ -41,14 +41,14 @@ function CategoryPage() {
     <div>
       <div className={`rounded-b-[36px] px-5 pb-8 pt-8 text-on-pastel ${color.bg}`}>
         <div className="flex items-center justify-between">
-          <Link to="/home" className="flex size-12 items-center justify-center rounded-full bg-white/60"><ArrowLeft className="size-5" /></Link>
+          <Link to="/home" className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60"><ArrowLeft className="size-5" /></Link>
           <div className="flex gap-2">
             {cat && (
-              <CategoryDialog initial={cat} trigger={<button aria-label="Bewerken" className="flex size-12 items-center justify-center rounded-full bg-white/60"><Pencil className="size-4" /></button>} />
+              <CategoryDialog initial={cat} trigger={<button aria-label="Bewerken" className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60"><Pencil className="size-4" /></button>} />
             )}
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <button aria-label="Verwijderen" className="flex size-12 items-center justify-center rounded-full bg-white/60"><Trash2 className="size-4" /></button>
+                <button aria-label="Verwijderen" className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60"><Trash2 className="size-4" /></button>
               </AlertDialogTrigger>
               <AlertDialogContent className="rounded-[30px]">
                 <AlertDialogHeader>

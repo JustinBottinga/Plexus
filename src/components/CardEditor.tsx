@@ -62,6 +62,26 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
     if (!f.category_id && cats?.[0]) setF((s) => ({ ...s, category_id: cats[0]!.id }));
   }, [cats, f.category_id]);
 
+  useEffect(() => {
+    const onPaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.startsWith("image/")) {
+          const fl = item.getAsFile();
+          if (fl) {
+            e.preventDefault();
+            pick(fl);
+          }
+          break;
+        }
+      }
+    };
+    window.addEventListener("paste", onPaste);
+    return () => window.removeEventListener("paste", onPaste);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const color = colorOf(cats?.find((c) => c.id === f.category_id)?.color);
   const imgUrl = localUrl ?? remoteUrl ?? null;
   const up = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
@@ -189,7 +209,7 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
             className={cn("tile flex aspect-[4/3] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-on-pastel/25 bg-white/50", dragOver && "bg-white/80")}
           >
             <ImagePlus className="size-8" />
-            <span className="mt-2 font-semibold">Sleep een afbeelding hierheen of klik om te uploaden</span>
+            <span className="mt-2 font-semibold">Sleep een afbeelding hierheen, plak met Ctrl+V of klik om te uploaden</span>
             <span className="text-xs opacity-75">PNG of JPG, maximaal 10 MB</span>
             <input type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />
           </label>

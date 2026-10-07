@@ -16,14 +16,14 @@ export function BoxEditor({
   mode,
   marker,
   covers,
-  coverClass,
+  coverClass = "bg-stage",
   onChange,
 }: {
   src: string;
   mode: "marker" | "cover";
   marker: Box | null;
   covers: Box[];
-  coverClass: string;
+  coverClass?: string;
   onChange: (marker: Box | null, covers: Box[]) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -123,7 +123,7 @@ export function BoxEditor({
       onPointerDown={down}
       onPointerMove={move}
       onPointerUp={up}
-      className="relative touch-none select-none overflow-hidden rounded-[24px] bg-card"
+      className="relative touch-none select-none overflow-hidden rounded-[24px] bg-stage"
     >
       <img src={src} alt="" draggable={false} className="pointer-events-none block w-full" />
       {covers.map((c, i) => renderBox(c, { kind: "cover", i }, cn("rounded-md", coverClass), `c${i}`))}
@@ -132,9 +132,9 @@ export function BoxEditor({
   );
 }
 
-export function BoxPreview({ src, marker, covers, coverClass }: { src: string; marker: Box | null; covers: Box[]; coverClass: string }) {
+export function BoxPreview({ src, marker, covers, coverClass = "bg-stage" }: { src: string; marker: Box | null; covers: Box[]; coverClass?: string }) {
   return (
-    <div className="relative overflow-hidden rounded-[24px] bg-card">
+    <div className="relative overflow-hidden rounded-[24px] bg-stage">
       <img src={src} alt="" className="block w-full" />
       {covers.map((b, i) => (
         <div key={i} className={cn("absolute rounded-md", coverClass)} style={{ left: `${b.x}%`, top: `${b.y}%`, width: `${b.w}%`, height: `${b.h}%` }} />

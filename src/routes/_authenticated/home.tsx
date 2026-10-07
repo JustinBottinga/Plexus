@@ -1,13 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Flame, List, Play, Plus, Search } from "lucide-react";
-import { categoriesQuery, profileQuery, studyDataQuery } from "@/lib/data";
+import { Check, Flame, List, Play, Plus, Search } from "lucide-react";
+import { activityQuery, categoriesQuery, profileQuery, studyDataQuery } from "@/lib/data";
+import { activeDays, currentStreak, weekStrip } from "@/lib/activity";
 import { summarize } from "@/lib/queue";
 import { todayLocal } from "@/lib/srs";
 import { loadSettings, sessionSearch } from "@/lib/studySettings";
 import { colorOf } from "@/lib/palette";
 import { CategoryDialog } from "@/components/CategoryDialog";
+import { Doodle, DoodleCluster, type DoodleName } from "@/components/Doodles";
 import { EmptyState } from "@/components/EmptyState";
+import { ProgressRing } from "@/components/ProgressRing";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/home")({
@@ -15,22 +18,40 @@ export const Route = createFileRoute("/_authenticated/home")({
   component: HomePage,
 });
 
+const WATERMARKS: DoodleName[] = ["bone", "heart", "eye", "hand", "cube", "pencil"];
+
 function HomePage() {
   const { data: me } = useQuery(profileQuery);
   const { data: cats, isLoading } = useQuery(categoriesQuery);
   const { data: study } = useQuery(studyDataQuery);
+  const { data: activity } = useQuery(activityQuery);
   const name = me?.profile?.display_name?.split(" ")[0] ?? "";
   const settings = loadSettings();
-  const summary = study ? summarize(study, settings.direction, todayLocal()) : null;
+  const today = todayLocal();
+  const summary = study ? summarize(study, settings.direction, today) : null;
   const due = summary?.due ?? 0;
   const fresh = Math.min(summary?.fresh ?? 0, settings.newLimit);
   const canStudy = due + fresh > 0;
 
+  // Cards rated today count towards the ring, so it fills up while you work through the stack
+  const doneToday = study
+    ? study.reviews.filter((r) => r.last_reviewed && todayLocal(new Date(r.last_reviewed)) === today).length
+    : 0;
+  const goal = doneToday + due;
+  const days = activeDays(activity ?? []);
+  const streak = currentStreak(days, today);
+  const week = weekStrip(days, today);
+
   return (
-    <div className="px-5 pt-10">
-      <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-semibold">Hoi{name ? `, ${name}` : ""}!</h1>
-        <Link to="/profile" className="flex size-12 items-center justify-center rounded-full bg-peach font-display text-lg font-semibold text-on-pastel">
+    <div className="px-5 pb-4 pt-10">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-semibold leading-none">Hoi{name ? `, ${name}` : ""}!</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {!study ? " " : canStudy ? "Klaar voor een rondje?" : "Alles is bij. Mooi werk."}
+          </p>
+        </div>
+        <Link to="/profile" aria-label="Profiel" className="flex size-12 shrink-0 items-center justify-center rounded-full bg-peach font-display text-lg font-semibold text-on-pastel">
           {name.charAt(0).toUpperCase()}
         </Link>
       </div>
@@ -40,35 +61,65 @@ function HomePage() {
         <input className="flex-1 bg-transparent text-sm outline-none" placeholder="Zoeken…" disabled />
       </label>
 
-      <div className="mt-5 grid grid-cols-2 gap-3">
+      <div className="tile tile-lift relative mt-5 flex min-h-56 flex-col justify-between overflow-hidden bg-butter p-6 text-on-pastel">
+        <DoodleCluster index={0} />
         <Link
           to={canStudy ? "/study/session" : "/study"}
           {...(canStudy ? { search: sessionSearch(settings) } : {})}
           aria-label={canStudy ? `Verder leren, ${due} kaarten te doen` : "Leren"}
-          className="tile tile-lift flex min-h-48 flex-col justify-between bg-ink p-5 text-ink-foreground"
-        >
-          <div>
-            <p className="font-display text-2xl font-semibold leading-tight">Verder leren</p>
-            <p className="mt-1 text-sm opacity-80">
-              {study ? (canStudy ? `${due} te doen${fresh > 0 ? ` · ${fresh} nieuw` : ""}` : "Helemaal bij") : " "}
-            </p>
-          </div>
-          <div className="flex items-end justify-between">
-            <span className="font-display text-5xl font-semibold tabular-nums">{study ? due : ""}</span>
-            <span className="flex size-12 items-center justify-center rounded-full bg-butter text-on-pastel">
-              <Play className="size-4 fill-current" />
-            </span>
-          </div>
-        </Link>
-        <div className="tile flex min-h-48 flex-col justify-between border bg-card p-5">
-          <p className="font-display text-2xl font-semibold leading-tight">Dagelijkse reeks</p>
-          <div className="flex items-end gap-2">
-            <Flame className="size-8 text-peach-deep" />
-            <span className="font-display text-4xl font-semibold">0</span>
-            <span className="pb-1 text-xs text-muted-foreground">dagen</span>
-          </div>
+          className="absolute inset-0 rounded-[inherit]"
+        />
+        <div className="pointer-events-none relative">
+          <p className="font-display text-3xl font-semibold leading-tight">Verder leren</p>
+          <p className="mt-1 text-sm text-on-pastel-muted">
+            {study ? (canStudy ? `${due} te doen${fresh > 0 ? ` · ${fresh} nieuw` : ""}` : "Helemaal bij") : " "}
+          </p>
+        </div>
+        <div className="pointer-events-none relative flex items-end justify-between">
+          <span className="flex h-12 items-center gap-2 rounded-full bg-ink px-6 text-sm font-semibold text-ink-foreground">
+            <Play className="size-4 fill-current" /> {canStudy ? "Start nu" : "Kies zelf"}
+          </span>
+          <ProgressRing
+            size={76}
+            stroke={7}
+            value={goal > 0 ? doneToday / goal : study ? 1 : 0}
+            label={`${doneToday} van ${goal} kaarten gedaan vandaag`}
+            className="text-on-pastel"
+          >
+            <span className="text-base">{study ? doneToday : ""}</span>
+            <span className="block pt-0.5 text-[10px] font-medium text-on-pastel-muted">{study ? `van ${goal}` : ""}</span>
+          </ProgressRing>
         </div>
       </div>
+
+      <section aria-label="Deze week" className="mt-3 rounded-[32px] border bg-card p-4">
+        <div className="flex items-center justify-between px-1">
+          <p className="font-display text-lg font-semibold">Deze week</p>
+          <span className="flex items-center gap-1.5 rounded-full bg-peach px-3 py-1.5 text-xs font-semibold text-on-pastel">
+            <Flame className="size-3.5" /> {streak} {streak === 1 ? "dag" : "dagen"} reeks
+          </span>
+        </div>
+        <ol className="mt-3 grid grid-cols-7 gap-1">
+          {week.map((d) => (
+            <li key={d.date} className="flex flex-col items-center gap-1.5">
+              <span className={cn("text-[11px] font-medium", d.isToday ? "text-foreground" : "text-muted-foreground")}>{d.label}</span>
+              <span
+                role="img"
+                aria-label={`${d.label}: ${d.active ? "geoefend" : d.isFuture ? "nog te komen" : "niet geoefend"}${d.isToday ? " (vandaag)" : ""}`}
+                className={cn(
+                  "flex size-9 items-center justify-center rounded-full",
+                  d.active && "bg-ink text-ink-foreground",
+                  !d.active && d.isToday && "border-2 border-peach-deep bg-peach/40",
+                  !d.active && !d.isToday && !d.isFuture && "bg-muted",
+                  d.isFuture && "border border-dashed border-muted-foreground/40",
+                )}
+              >
+                {d.active && <Check className="size-4" strokeWidth={3} />}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
 
       <div className="mt-8 flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Categorieën</h2>
@@ -78,16 +129,29 @@ function HomePage() {
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        {isLoading && [0, 1].map((i) => <div key={i} className="tile h-36 animate-pulse bg-muted" />)}
+        {isLoading && [0, 1].map((i) => <div key={i} className="tile h-40 animate-pulse bg-muted" />)}
         {cats?.map((c, i) => {
           const n = summary?.byCategory.get(c.id);
           const dueHere = n?.due ?? 0;
-          const startable = dueHere + Math.min(n?.fresh ?? 0, settings.newLimit) > 0;
+          const freshHere = n?.fresh ?? 0;
+          const startable = dueHere + Math.min(freshHere, settings.newLimit) > 0;
+          const wide = i % 3 === 0;
+          // Share of the cards that are scheduled for later: 100% means nothing is waiting
+          const upToDate = c.count > 0 ? Math.max(0, c.count - dueHere - freshHere) / c.count : 0;
           return (
             <div
               key={c.id}
-              className={cn("tile tile-lift relative flex min-h-36 flex-col justify-between gap-3 p-5 text-on-pastel", colorOf(c.color).bg, i % 3 === 0 && "col-span-2")}
+              className={cn(
+                "tile tile-lift relative flex flex-col justify-between gap-4 overflow-hidden p-5 text-on-pastel",
+                colorOf(c.color).bg,
+                wide ? "col-span-2 min-h-44" : "min-h-48",
+              )}
             >
+              {wide ? (
+                <DoodleCluster index={i + 1} className="inset-auto bottom-2 right-[5.5rem] top-auto h-28 w-40 opacity-60" />
+              ) : (
+                <Doodle name={WATERMARKS[(i + 2) % WATERMARKS.length]!} className="pointer-events-none absolute -bottom-3 -right-3 size-24 rotate-6 opacity-25" />
+              )}
               {/* Stretched link: the whole tile starts a session for this category */}
               <Link
                 to="/study/session"
@@ -95,14 +159,21 @@ function HomePage() {
                 aria-label={`Leer ${c.name}, ${dueHere} te doen`}
                 className="absolute inset-0 rounded-[inherit]"
               />
-              <p className="pointer-events-none pr-12 font-display text-xl font-semibold leading-tight">{c.name}</p>
-              <div className="pointer-events-none flex flex-wrap gap-2">
-                <span className={cn("rounded-full px-3 py-1.5 text-xs font-semibold", startable ? "bg-ink text-ink-foreground" : "bg-pastel-surface/60")}>
-                  {dueHere} te doen
-                </span>
-                <span className="rounded-full bg-pastel-surface/60 px-3 py-1.5 text-xs font-medium">
-                  {c.count} {c.count === 1 ? "kaart" : "kaarten"}
-                </span>
+              <p className="pointer-events-none relative pr-14 font-display text-xl font-semibold leading-tight">{c.name}</p>
+              <div className="pointer-events-none relative flex items-end justify-between gap-3">
+                <div className="flex flex-col items-start gap-2">
+                  <span className={cn("rounded-full px-3 py-1.5 text-xs font-semibold", startable ? "bg-ink text-ink-foreground" : "bg-pastel-surface/60")}>
+                    {dueHere} te doen
+                  </span>
+                  <span className="rounded-full bg-pastel-surface/60 px-3 py-1.5 text-xs font-medium">
+                    {c.count} {c.count === 1 ? "kaart" : "kaarten"}
+                  </span>
+                </div>
+                {c.count > 0 && (
+                  <ProgressRing size={56} stroke={5} value={upToDate} label={`${Math.round(upToDate * 100)}% bij`}>
+                    <span className="text-[11px]">{Math.round(upToDate * 100)}%</span>
+                  </ProgressRing>
+                )}
               </div>
               <Link
                 to="/categories/$id"

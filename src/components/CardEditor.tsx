@@ -232,7 +232,6 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
               mode={mode}
               marker={marker}
               covers={covers}
-              coverClass={color.deep}
               onChange={(m, c) => { setMarker(m); setCovers(c); }}
             />
             <p className="mt-2 text-xs text-on-pastel-muted">

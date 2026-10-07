@@ -97,3 +97,15 @@ export const studyDataQuery = queryOptions({
     return { cards, reviews, categories: categories.data };
   },
 });
+
+/** When cards were rated over the last 60 days, for the streak and the week overview. */
+export const activityQuery = queryOptions({
+  queryKey: ["cards", "activity"],
+  queryFn: async () => {
+    const since = new Date(Date.now() - 60 * 24 * 3600 * 1000).toISOString();
+    const rows = await fetchAll<{ reviewed_at: string }>((a, b) =>
+      supabase.from("review_log").select("reviewed_at").gte("reviewed_at", since).order("reviewed_at").range(a, b),
+    );
+    return rows.map((r) => r.reviewed_at);
+  },
+});

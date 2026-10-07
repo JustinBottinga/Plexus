@@ -13,6 +13,7 @@ import {
   type StudyMode,
   type StudySettings,
 } from "@/lib/studySettings";
+import { DoodleCluster } from "@/components/Doodles";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -100,7 +101,7 @@ function StudySetup() {
       <p className="mt-1 text-sm text-muted-foreground">Kies wat je vandaag wilt oefenen.</p>
 
       <div role="radiogroup" aria-label="Wat wil je leren" className="mt-6 grid gap-3">
-        {MODES.map(({ key, title, text, icon: Icon, bg }) => {
+        {MODES.map(({ key, title, text, icon: Icon, bg }, modeIndex) => {
           const on = s.mode === key;
           return (
             <button
@@ -109,23 +110,24 @@ function StudySetup() {
               aria-checked={on}
               onClick={() => setMode(key)}
               className={cn(
-                "tile flex min-h-24 items-center gap-4 p-5 text-left text-on-pastel",
+                "tile relative flex min-h-24 items-center gap-4 overflow-hidden p-5 text-left text-on-pastel",
                 bg,
                 on
                   ? "pop ring-[3px] ring-foreground ring-offset-2 ring-offset-background"
                   : "opacity-90",
               )}
             >
-              <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-pastel-surface/60">
+              <DoodleCluster index={modeIndex + 1} className="-translate-x-12 opacity-30" />
+              <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-pastel-surface/60">
                 <Icon className="size-5" />
               </span>
-              <span className="flex-1">
+              <span className="relative flex-1">
                 <span className="block font-display text-xl font-semibold leading-tight">
                   {title}
                 </span>
                 <span className="block text-sm text-on-pastel-muted">{text}</span>
               </span>
-              {on && <Check className="size-5 shrink-0" />}
+              {on && <Check className="relative size-5 shrink-0" />}
             </button>
           );
         })}

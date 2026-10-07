@@ -46,7 +46,7 @@ function CardView() {
 
       <div className="mt-6">
         {url ? (
-          <BoxPreview src={url} marker={card.marker as Box | null} covers={(card.covers as Box[] | null) ?? []} coverClass={color.deep} />
+          <BoxPreview src={url} marker={card.marker as Box | null} covers={(card.covers as Box[] | null) ?? []} />
         ) : (
           <div className="tile aspect-[4/3] animate-pulse bg-pastel-surface/40" />
         )}

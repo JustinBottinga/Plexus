@@ -6,14 +6,13 @@ import { cn } from "@/lib/utils";
 const pct = (b: Box) => ({ left: `${b.x}%`, top: `${b.y}%`, width: `${b.w}%`, height: `${b.h}%` });
 
 /**
- * The illustration on a rounded stage tinted with the category color. The image is multiplied onto the
- * tint so the white of anatomy plates disappears; cover boxes use the same color to hide printed labels.
+ * The illustration on a rounded white stage. The category color stays around the stage (the screen
+ * background) and never touches the image; cover boxes use the stage color to hide printed labels.
  */
 export function StudyStage({
   src,
   marker,
   covers,
-  tintClass,
   showMarker,
   maxHeight,
   tap,
@@ -23,8 +22,6 @@ export function StudyStage({
   src: string;
   marker: Box | null;
   covers: Box[];
-  /** Tailwind background class of the category's deep tint, e.g. `bg-mint-deep` */
-  tintClass: string;
   showMarker: boolean;
   /** Any CSS length; the image shrinks to this height */
   maxHeight: string;
@@ -49,7 +46,7 @@ export function StudyStage({
   }
 
   return (
-    <div className={cn("isolate flex w-full items-center justify-center rounded-[32px] p-3 shadow-sm", tintClass)}>
+    <div className={cn("isolate flex w-full items-center justify-center rounded-[32px] bg-stage p-3 shadow-sm")}>
       <div
         onPointerDown={handlePointer}
         className={cn("relative touch-manipulation select-none transition-[width] duration-500", onTap && "cursor-crosshair")}
@@ -61,10 +58,10 @@ export function StudyStage({
           alt=""
           draggable={false}
           onLoad={(e) => setRatio(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
-          className="absolute inset-0 size-full rounded-2xl object-fill mix-blend-multiply"
+          className="absolute inset-0 size-full rounded-2xl object-fill"
         />
         {covers.map((b, i) => (
-          <div key={i} className={cn("absolute rounded-md", tintClass)} style={pct(b)} />
+          <div key={i} className="absolute rounded-md bg-stage" style={pct(b)} />
         ))}
         {showMarker && marker && (
           <div

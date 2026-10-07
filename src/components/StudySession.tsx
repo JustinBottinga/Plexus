@@ -79,7 +79,7 @@ export function StudySession({
   useEffect(() => {
     void load();
     // Home and the setup screen show due counts: refresh them when the session closes.
-    return () => void qc.invalidateQueries({ queryKey: ["cards", "study"] });
+    return () => void qc.invalidateQueries({ queryKey: ["cards"] });
   }, [load, qc]);
 
   const card = phase === "studying" ? queue[idx] : undefined;
@@ -273,7 +273,6 @@ export function StudySession({
                 src={url}
                 marker={marker}
                 covers={covers}
-                tintClass={color.deep}
                 showMarker={direction === "image" || revealed}
                 maxHeight={revealed ? "30svh" : direction === "image" ? "46svh" : "38svh"}
                 tap={direction === "location" ? tap : null}
@@ -281,7 +280,7 @@ export function StudySession({
                 onTap={direction === "location" && !revealed ? onTap : undefined}
               />
             ) : (
-              <div className={cn("flex aspect-[4/3] w-full animate-pulse items-center justify-center rounded-[32px] text-sm", color.deep)}>
+              <div className={cn("flex aspect-[4/3] w-full animate-pulse items-center justify-center rounded-[32px] bg-stage/60 text-sm")}>
                 {card.image_path ? "Afbeelding laden…" : "Geen afbeelding"}
               </div>
             )}

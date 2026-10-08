@@ -82,7 +82,8 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const color = colorOf(cats?.find((c) => c.id === f.category_id)?.color);
+  const category = cats?.find((c) => c.id === f.category_id);
+  const color = colorOf(category?.color);
   const imgUrl = localUrl ?? remoteUrl ?? null;
   const up = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
 
@@ -181,23 +182,17 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
           </AlertDialog>
         )}
       </div>
-      <h1 className="mt-6 text-4xl font-semibold">{card ? "Kaart bewerken" : "Nieuwe kaart"}</h1>
+      <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
+        <h1 className="text-4xl font-semibold">{card ? "Kaart bewerken" : "Nieuwe kaart"}</h1>
+        {/* The category is fixed here: it comes from where the card was opened and is not changed in this screen */}
+        {category && (
+          <span className="rounded-full bg-pastel-surface/60 px-4 py-2 text-sm font-semibold text-on-pastel">{category.name}</span>
+        )}
+      </div>
 
       <section className="mt-6 space-y-3">
         <Input className={field} placeholder="Naam (NL)" value={f.name_nl} onChange={up("name_nl")} />
         <Input className={cn(field, "italic")} placeholder="Latijnse naam (optioneel)" value={f.name_latin} onChange={up("name_latin")} />
-        <div className="flex flex-wrap gap-2">
-          {cats?.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => setF({ ...f, category_id: c.id })}
-              className={cn("flex h-12 items-center rounded-full border-2 px-5 text-sm font-medium transition-transform", colorOf(c.color).bg, f.category_id === c.id ? "pop border-on-pastel" : "border-pastel-surface/70")}
-            >
-              {c.name}
-            </button>
-          ))}
-        </div>
       </section>
 
       <section className="mt-6">

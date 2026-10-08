@@ -1,9 +1,10 @@
 import { useState, type ReactNode } from "react";
 import { Info } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 /** Small info button: the text shows on mouse hover and stays open after a click or tap. */
-export function InfoHint({ label, children }: { label: string; children: ReactNode }) {
+export function InfoHint({ label, className, children }: { label: string; className?: string; children: ReactNode }) {
   const [hover, setHover] = useState(false);
   const [pinned, setPinned] = useState(false);
 
@@ -13,7 +14,7 @@ export function InfoHint({ label, children }: { label: string; children: ReactNo
         <button
           type="button"
           aria-label={label}
-          className="flex size-12 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
+          className={cn("flex size-12 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground", className)}
           onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
           onPointerLeave={(e) => e.pointerType === "mouse" && setHover(false)}
           onClick={(e) => {

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { signedUrlQuery, studyDataQuery, useSignedUrl, type Box, type Card } from "@/lib/data";
 import { colorOf, type ColorKey } from "@/lib/palette";
-import { buildQueue, isHit } from "@/lib/queue";
+import { assignDirections, buildQueue, isHit } from "@/lib/queue";
 import { submitReview } from "@/lib/reviewWriter";
 import { addDays, INITIAL_STATE, nextState, previewIntervals, RATINGS, todayLocal, type Direction, type Rating, type SrsState } from "@/lib/srs";
 import { AnswerSheet } from "@/components/AnswerSheet";
@@ -21,12 +21,12 @@ const NO_COUNTS: Record<Rating, number> = { again: 0, hard: 0, good: 0, easy: 0 
 
 export function StudySession({
   categoryIds,
-  direction,
+  directions,
   newLimit,
   practice = false,
 }: {
   categoryIds: string[] | null;
-  direction: Direction;
+  directions: Direction[];
   newLimit: number;
   /** Re-practise everything in the selection; ratings don't touch the review schedule. */
   practice?: boolean;
@@ -49,8 +49,10 @@ export function StudySession({
   const userId = useRef<string | null>(null);
   const startedAt = useRef(Date.now());
   const loadId = useRef(0);
-  const opts = useRef({ categoryIds, direction, newLimit, practice });
-  opts.current = { categoryIds, direction, newLimit, practice };
+  const opts = useRef({ categoryIds, directions, newLimit, practice });
+  opts.current = { categoryIds, directions, newLimit, practice };
+  // Each card is asked in one direction for the whole session (also when it comes back after "Again")
+  const [dirOf, setDirOf] = useState<Map<string, Direction>>(new Map());
 
   const load = useCallback(async () => {
     const mine = ++loadId.current;
@@ -65,6 +67,7 @@ export function StudySession({
       setColors(new Map(data.categories.map((c) => [c.id, c.color])));
       const q = buildQueue({ cards: data.cards, reviews: data.reviews, today: todayLocal(), ...opts.current });
       setQueue(q);
+      setDirOf(assignDirections(q, opts.current.directions));
       setIdx(0);
       setRevealed(false);
       setTap(null);
@@ -83,6 +86,7 @@ export function StudySession({
   }, [load, qc]);
 
   const card = phase === "studying" ? queue[idx] : undefined;
+  const direction: Direction = (card && dirOf.get(card.id)) || directions[0] || "image";
   const colorKey = (colors.get(card?.category_id ?? "") ?? lastColor) as ColorKey;
   const color = colorOf(colorKey);
   const { data: url } = useSignedUrl(card?.image_path);

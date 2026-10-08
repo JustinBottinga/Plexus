@@ -24,6 +24,7 @@ Reference: the attached screenshots (pastel color-blocking, big rounded tiles, p
 - Card tiles in a category: the tile is the category color, the photo sits inset on its own white stage with a rounded frame, the name below in display type.
 - The home header is the "Hoi, [name]!" greeting with a one-line status under it. There is no search bar until search actually works.
 - Bottom tab bar with 4 icons: Home, Study, Library, Profile.
+- Study is a short flow: choose what (everything, one category, several categories), then pick the categories on their own screen. Settings that rarely change (direction with checkboxes, new cards per session as a few fixed choices, notifications) live in the profile, not on the study screen.
 - Info that would be a wall of text goes behind a small info icon (`InfoHint`): shown on hover, kept open on click or tap.
 
 ### Study card

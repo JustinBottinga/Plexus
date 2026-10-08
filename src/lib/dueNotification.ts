@@ -120,7 +120,7 @@ export function useDueNotifications() {
       const { data: d, navigate: go } = latest.current;
       if (!d) return;
       const today = todayLocal();
-      const dueCount = summarize(d, "image", today).due;
+      const dueCount = summarize(d, ["image"], today).due;
       const ok = shouldNotify({
         enabled: true,
         permission: permissionNow(),

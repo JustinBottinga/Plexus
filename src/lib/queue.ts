@@ -14,7 +14,8 @@ type Opts = {
   reviews: ReviewRow[];
   /** null = all categories */
   categoryIds: string[] | null;
-  direction: Direction;
+  /** Which ways of asking are switched on. Both on: every card gets one of the two. */
+  directions: Direction[];
   today: string;
 };
 
@@ -27,16 +28,27 @@ export function shuffle<T>(items: T[], random: () => number = Math.random): T[] 
   return a;
 }
 
-/** Cards that can be studied in this direction: "location" needs a marker to check the tap against. */
-export function isStudyable(card: Card, direction: Direction): boolean {
-  return direction === "image" || !!(card.marker as Box | null);
+/** Cards that can be studied: "location" needs a marker to check the tap against. */
+export function isStudyable(card: Card, directions: Direction[]): boolean {
+  return directions.includes("image") || (directions.includes("location") && !!(card.marker as Box | null));
+}
+
+/** Picks the direction each card is asked in. With both on, cards that have a marker get one at random. */
+export function assignDirections(cards: Card[], directions: Direction[], random: () => number = Math.random): Map<string, Direction> {
+  const map = new Map<string, Direction>();
+  for (const card of cards) {
+    const hasMarker = !!(card.marker as Box | null);
+    const options = directions.filter((d) => d === "image" || hasMarker);
+    map.set(card.id, options[Math.floor(random() * options.length)] ?? "image");
+  }
+  return map;
 }
 
 /** Due cards (overdue first, shuffled within the same due date) and new cards (shuffled, unlimited). */
-export function splitCards({ cards, reviews, categoryIds, direction, today }: Opts, random = Math.random) {
+export function splitCards({ cards, reviews, categoryIds, directions, today }: Opts, random = Math.random) {
   const wanted = categoryIds ? new Set(categoryIds) : null;
   const reviewByCard = new Map(reviews.map((r) => [r.card_id, r]));
-  const pool = cards.filter((c) => (!wanted || wanted.has(c.category_id)) && isStudyable(c, direction));
+  const pool = cards.filter((c) => (!wanted || wanted.has(c.category_id)) && isStudyable(c, directions));
 
   const due: { card: Card; due_date: string }[] = [];
   const fresh: Card[] = [];
@@ -53,12 +65,12 @@ export function splitCards({ cards, reviews, categoryIds, direction, today }: Op
 
 /** Every studyable card in the selected categories, shuffled: for re-practising what is not due yet. */
 export function buildPracticeQueue(
-  { cards, categoryIds, direction }: Pick<Opts, "cards" | "categoryIds" | "direction">,
+  { cards, categoryIds, directions }: Pick<Opts, "cards" | "categoryIds" | "directions">,
   random = Math.random,
 ): Card[] {
   const wanted = categoryIds ? new Set(categoryIds) : null;
   return shuffle(
-    cards.filter((c) => (!wanted || wanted.has(c.category_id)) && isStudyable(c, direction)),
+    cards.filter((c) => (!wanted || wanted.has(c.category_id)) && isStudyable(c, directions)),
     random,
   );
 }
@@ -78,10 +90,10 @@ export type DueSummary = {
 /** Counts for the home tiles and setup chips. */
 export function summarize(
   data: { cards: Card[]; reviews: ReviewRow[] },
-  direction: Direction,
+  directions: Direction[],
   today: string,
 ): DueSummary {
-  const { due, fresh } = splitCards({ ...data, categoryIds: null, direction, today });
+  const { due, fresh } = splitCards({ ...data, categoryIds: null, directions, today });
   const byCategory = new Map<string, { due: number; fresh: number }>();
   const bump = (id: string, key: "due" | "fresh") => {
     const e = byCategory.get(id) ?? { due: 0, fresh: 0 };

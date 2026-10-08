@@ -63,7 +63,7 @@ function renderSession(props: Partial<React.ComponentProps<typeof StudySession>>
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <QueryClientProvider client={qc}>
-      <StudySession categoryIds={null} direction="image" newLimit={10} {...props} />
+      <StudySession categoryIds={null} directions={["image"]} newLimit={10} {...props} />
     </QueryClientProvider>,
   );
 }
@@ -175,7 +175,7 @@ describe("StudySession", () => {
 
   it("location direction: skips cards without a marker, checks the tap against the marker", async () => {
     tables.cards = [card("a", "Biceps"), card("b", "Triceps", { marker: null })];
-    renderSession({ direction: "location" });
+    renderSession({ directions: ["location"] });
     await screen.findByText("1 / 1");
     expect(screen.getByText("Biceps")).toBeTruthy(); // name is shown in this direction
     expect(screen.queryByText("Triceps")).toBeNull();
@@ -189,7 +189,7 @@ describe("StudySession", () => {
 
   it("location direction: a tap outside the marker suggests Again", async () => {
     tables.cards = [card("a", "Biceps")];
-    renderSession({ direction: "location" });
+    renderSession({ directions: ["location"] });
     await screen.findByText("1 / 1");
     const stage = await findStage();
     stage.getBoundingClientRect = () => ({ left: 0, top: 0, width: 200, height: 100, right: 200, bottom: 100, x: 0, y: 0, toJSON() {} });

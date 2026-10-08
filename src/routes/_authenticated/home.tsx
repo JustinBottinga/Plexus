@@ -25,7 +25,7 @@ function HomePage() {
   const name = me?.profile?.display_name?.split(" ")[0] ?? "";
   const settings = loadSettings();
   const today = todayLocal();
-  const summary = study ? summarize(study, settings.direction, today) : null;
+  const summary = study ? summarize(study, settings.directions, today) : null;
   const due = summary?.due ?? 0;
   const fresh = Math.min(summary?.fresh ?? 0, settings.newLimit);
   const canStudy = due + fresh > 0;

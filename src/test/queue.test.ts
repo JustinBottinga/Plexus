@@ -16,7 +16,7 @@ const review = (card_id: string, due_date: string): ReviewRow => ({
 const today = "2026-10-05";
 const cards = [card("a", "c1"), card("b", "c1"), card("c", "c2"), card("d", "c2", false), card("e", "c1"), card("f", "c1")];
 const reviews = [review("a", "2026-10-05"), review("b", "2026-10-01"), review("c", "2026-10-06"), review("d", "2026-10-02")];
-const base = { cards, reviews, categoryIds: null, direction: "image" as const, today };
+const base = { cards, reviews, categoryIds: null, directions: ["image" as const], today };
 
 describe("session queue", () => {
   it("puts due cards first, most overdue first, then new cards", () => {
@@ -37,7 +37,7 @@ describe("session queue", () => {
   });
 
   it("skips cards without a marker in the location direction", () => {
-    const q = buildQueue({ ...base, direction: "location", newLimit: 10 }).map((c) => c.id);
+    const q = buildQueue({ ...base, directions: ["location"], newLimit: 10 }).map((c) => c.id);
     expect(q).not.toContain("d");
   });
 
@@ -49,7 +49,7 @@ describe("session queue", () => {
   it("practice mode still respects the category and direction", () => {
     expect(buildQueue({ ...base, categoryIds: ["c2"], newLimit: 10, practice: true }).map((c) => c.id).sort()).toEqual(["c", "d"]);
     expect(
-      buildQueue({ ...base, categoryIds: ["c2"], direction: "location", newLimit: 10, practice: true }).map((c) => c.id),
+      buildQueue({ ...base, categoryIds: ["c2"], directions: ["location"], newLimit: 10, practice: true }).map((c) => c.id),
     ).toEqual(["c"]);
   });
 
@@ -60,7 +60,7 @@ describe("session queue", () => {
   });
 
   it("summarizes counts per category", () => {
-    const s = summarize({ cards, reviews }, "image", today);
+    const s = summarize({ cards, reviews }, ["image"], today);
     expect(s.due).toBe(3);
     expect(s.fresh).toBe(2);
     expect(s.byCategory.get("c1")).toEqual({ due: 2, fresh: 2 });

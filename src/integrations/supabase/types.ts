@@ -169,16 +169,19 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          daily_goal: number
           display_name: string | null
           id: string
         }
         Insert: {
           created_at?: string
+          daily_goal?: number
           display_name?: string | null
           id: string
         }
         Update: {
           created_at?: string
+          daily_goal?: number
           display_name?: string | null
           id?: string
         }
@@ -264,6 +267,34 @@ export type Database = {
     Functions: {
       accept_invite: { Args: { p_token: string }; Returns: string }
       can_read_shared_image: { Args: { p_path: string }; Returns: boolean }
+      category_stats: {
+        Args: { p_tz?: string }
+        Returns: {
+          category_id: string
+          good_30: number
+          learning: number
+          mature: number
+          new_cards: number
+          reviews_30: number
+          total: number
+        }[]
+      }
+      daily_review_counts: {
+        Args: { p_days?: number; p_tz?: string }
+        Returns: { category_id: string; day: string; good: number; reviews: number }[]
+      }
+      due_forecast: {
+        Args: { p_days?: number; p_tz?: string }
+        Returns: { day: string; due: number }[]
+      }
+      streak_stats: {
+        Args: { p_tz?: string }
+        Returns: { current_streak: number; longest_streak: number; reviewed_today: number; total_reviews: number }[]
+      }
+      weakest_cards: {
+        Args: { p_limit?: number; p_tz?: string }
+        Returns: { again_count: number; card_id: string; category_id: string; name_nl: string }[]
+      }
       invite_preview: {
         Args: { p_token: string }
         Returns: {

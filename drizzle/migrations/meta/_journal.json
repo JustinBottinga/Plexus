@@ -36,6 +36,13 @@
       "when": 1791402440112,
       "tag": "0004_category_invites",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791449198743,
+      "tag": "0005_progress",
+      "breakpoints": true
     }
   ]
 }

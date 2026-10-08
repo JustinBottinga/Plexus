@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Check, Flame, List, Play, Plus } from "lucide-react";
-import { activityQuery, categoriesQuery, profileQuery, studyDataQuery } from "@/lib/data";
-import { activeDays, currentStreak, weekStrip } from "@/lib/activity";
+import { CalendarCheck, List, Play, Plus } from "lucide-react";
+import { categoriesQuery, profileQuery, studyDataQuery } from "@/lib/data";
+import { homeStreakQuery } from "@/lib/progress";
 import { summarize } from "@/lib/queue";
-import { todayLocal } from "@/lib/srs";
+import { addDays, todayLocal } from "@/lib/srs";
 import { loadSettings, sessionSearch } from "@/lib/studySettings";
 import { colorOf } from "@/lib/palette";
 import { CategoryDialog } from "@/components/CategoryDialog";
@@ -21,7 +21,7 @@ function HomePage() {
   const { data: me } = useQuery(profileQuery);
   const { data: cats, isLoading } = useQuery(categoriesQuery);
   const { data: study } = useQuery(studyDataQuery);
-  const { data: activity } = useQuery(activityQuery);
+  const { data: streakInfo } = useQuery(homeStreakQuery);
   const name = me?.profile?.display_name?.split(" ")[0] ?? "";
   const settings = loadSettings();
   const today = todayLocal();
@@ -35,9 +35,12 @@ function HomePage() {
     ? study.reviews.filter((r) => r.last_reviewed && todayLocal(new Date(r.last_reviewed)) === today).length
     : 0;
   const goal = doneToday + due;
-  const days = activeDays(activity ?? []);
-  const streak = currentStreak(days, today);
-  const week = weekStrip(days, today);
+  const streak = streakInfo?.streak ?? 0;
+  const last7 = Array.from({ length: 7 }, (_, i) => addDays(today, i - 6));
+  const dayLetter = (date: string) => {
+    const [y, m, d] = date.split("-").map(Number) as [number, number, number];
+    return new Date(y, m - 1, d).toLocaleDateString("nl-NL", { weekday: "narrow" });
+  };
 
   return (
     <div className="px-5 pb-4 pt-10">
@@ -83,34 +86,36 @@ function HomePage() {
         </div>
       </div>
 
-      <section aria-label="Deze week" className="mt-3 rounded-[32px] border bg-card p-4">
-        <div className="flex items-center justify-between px-1">
-          <p className="font-display text-lg font-semibold">Deze week</p>
-          <span className="flex items-center gap-1.5 rounded-full bg-peach px-3 py-1.5 text-xs font-semibold text-on-pastel">
-            <Flame className="size-3.5" /> {streak} {streak === 1 ? "dag" : "dagen"} reeks
-          </span>
+      <Link
+        to="/progress"
+        aria-label={`Reeks van ${streak} ${streak === 1 ? "dag" : "dagen"}, bekijk je voortgang`}
+        className="tile mt-3 flex items-center justify-between gap-4 border bg-card p-5"
+      >
+        <div>
+          <p className="flex items-center gap-2 text-sm text-muted-foreground">
+            <CalendarCheck className="size-4" /> Reeks
+          </p>
+          <p className="mt-1 font-display text-5xl font-semibold leading-none tabular-nums">{streakInfo ? streak : " "}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{streak === 1 ? "dag" : "dagen"} op rij</p>
         </div>
-        <ol className="mt-3 grid grid-cols-7 gap-1">
-          {week.map((d) => (
-            <li key={d.date} className="flex flex-col items-center gap-1.5">
-              <span className={cn("text-[11px] font-medium", d.isToday ? "text-foreground" : "text-muted-foreground")}>{d.label}</span>
-              <span
-                role="img"
-                aria-label={`${d.label}: ${d.active ? "geoefend" : d.isFuture ? "nog te komen" : "niet geoefend"}${d.isToday ? " (vandaag)" : ""}`}
-                className={cn(
-                  "flex size-9 items-center justify-center rounded-full",
-                  d.active && "bg-ink text-ink-foreground",
-                  !d.active && d.isToday && "border-2 border-peach-deep bg-peach/40",
-                  !d.active && !d.isToday && !d.isFuture && "bg-muted",
-                  d.isFuture && "border border-dashed border-muted-foreground/40",
-                )}
-              >
-                {d.active && <Check className="size-4" strokeWidth={3} />}
-              </span>
-            </li>
-          ))}
+        <ol className="flex gap-2" aria-label="Laatste 7 dagen">
+          {last7.map((date, i) => {
+            const active = streakInfo?.days.has(date) ?? false;
+            return (
+              <li key={date} className="flex flex-col items-center gap-1.5">
+                <span
+                  role="img"
+                  aria-label={`${date}: ${active ? "geoefend" : "niet geoefend"}`}
+                  className={cn("size-3.5 rounded-full", active ? "bg-foreground" : "border border-muted-foreground/50")}
+                />
+                <span aria-hidden="true" className={cn("text-[10px]", i === 6 ? "font-semibold text-foreground" : "text-muted-foreground")}>
+                  {dayLetter(date)}
+                </span>
+              </li>
+            );
+          })}
         </ol>
-      </section>
+      </Link>
 
       <div className="mt-8 flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Categorieën</h2>

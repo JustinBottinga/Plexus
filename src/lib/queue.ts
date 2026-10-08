@@ -75,7 +75,17 @@ export function buildPracticeQueue(
   );
 }
 
-export function buildQueue(opts: Opts & { newLimit: number; practice?: boolean }, random = Math.random): Card[] {
+export function buildQueue(
+  opts: Opts & { newLimit: number; practice?: boolean; /** Study exactly these cards, due or not */ onlyCardIds?: string[] | null },
+  random = Math.random,
+): Card[] {
+  if (opts.onlyCardIds?.length) {
+    const wanted = new Set(opts.onlyCardIds);
+    return shuffle(
+      opts.cards.filter((c) => wanted.has(c.id) && isStudyable(c, opts.directions)),
+      random,
+    );
+  }
   if (opts.practice) return buildPracticeQueue(opts, random);
   const { due, fresh } = splitCards(opts, random);
   return [...due, ...fresh.slice(0, Math.max(0, opts.newLimit))];

@@ -27,6 +27,13 @@ Reference: the attached screenshots (pastel color-blocking, big rounded tiles, p
 - Study is a short flow: choose what (everything, one category, several categories), then pick the categories on their own screen. Settings that rarely change (direction with checkboxes, new cards per session as a few fixed choices, notifications) live in the profile, not on the study screen.
 - Info that would be a wall of text goes behind a small info icon (`InfoHint`): shown on hover, kept open on click or tap.
 
+### Progress
+- Home has one streak tile: the streak as a big number, a small calendar icon (no flame) and the last 7 days as dots. Tapping it opens the Progress screen; the Profile tab starts with a Progress block that does the same.
+- The Progress screen is a column of tiles: Today (ring toward the daily goal, longest streak), Reviews (7 / 30 / 90 days, stacked by category), a 12-week calendar, a 7-day forecast, one tile per category in its own color, the weakest cards, and totals.
+- Charts never rely on color alone: category segments also get a pattern (solid, stripes, dots), the legend shows both, a tapped bar lists every category with its count, and the heatmap has a legend and a readout.
+- Faces above the bars (7-day view only) go from frown to smile with the share of Good and Easy ratings. Days without reviews get none.
+- All numbers come from database functions (daily_review_counts, streak_stats, due_forecast, category_stats, weakest_cards) that take the user's time zone. The goal celebration plays once per day.
+
 ### Study card
 - The current card is large and slightly tilted, with the next card peeking out behind it. Image direction: the plate on the white stage. Location direction: upright, so taps map to the image.
 - Reveal the answer with a soft slide-up sheet, never a hard cut.

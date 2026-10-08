@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedProgressRouteImport } from './routes/_authenticated/progress'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as AuthenticatedCardsNewRouteImport } from './routes/_authenticated/cards.new'
 import { Route as AuthenticatedCategoriesIdRouteImport } from './routes/_authenticated/categories.$id'
@@ -51,6 +52,11 @@ const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProgressRoute = AuthenticatedProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/progress': typeof AuthenticatedProgressRoute
   '/invite/$token': typeof InviteTokenRoute
   '/cards/new': typeof AuthenticatedCardsNewRoute
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/progress': typeof AuthenticatedProgressRoute
   '/invite/$token': typeof InviteTokenRoute
   '/cards/new': typeof AuthenticatedCardsNewRoute
   '/categories/$id': typeof AuthenticatedCategoriesIdRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/progress': typeof AuthenticatedProgressRoute
   '/invite/$token': typeof InviteTokenRoute
   '/_authenticated/cards/new': typeof AuthenticatedCardsNewRoute
   '/_authenticated/categories/$id': typeof AuthenticatedCategoriesIdRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/library'
     | '/profile'
+    | '/progress'
     | '/invite/$token'
     | '/cards/new'
     | '/categories/$id'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/library'
     | '/profile'
+    | '/progress'
     | '/invite/$token'
     | '/cards/new'
     | '/categories/$id'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/_authenticated/home'
     | '/_authenticated/library'
     | '/_authenticated/profile'
+    | '/_authenticated/progress'
     | '/invite/$token'
     | '/_authenticated/cards/new'
     | '/_authenticated/categories/$id'
@@ -244,6 +256,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/progress': {
+      id: '/_authenticated/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof AuthenticatedProgressRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/invite/$token': {
@@ -309,6 +328,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedProgressRoute: typeof AuthenticatedProgressRoute
   AuthenticatedCardsNewRoute: typeof AuthenticatedCardsNewRoute
   AuthenticatedCategoriesIdRoute: typeof AuthenticatedCategoriesIdRoute
   AuthenticatedStudyCategoriesRoute: typeof AuthenticatedStudyCategoriesRoute
@@ -322,6 +342,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedProgressRoute: AuthenticatedProgressRoute,
   AuthenticatedCardsNewRoute: AuthenticatedCardsNewRoute,
   AuthenticatedCategoriesIdRoute: AuthenticatedCategoriesIdRoute,
   AuthenticatedStudyCategoriesRoute: AuthenticatedStudyCategoriesRoute,

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { profileQuery } from "@/lib/data";
 import { Button } from "@/components/ui/button";
@@ -8,9 +9,11 @@ import { Switch } from "@/components/ui/switch";
 import { InfoHint } from "@/components/InfoHint";
 import { notificationsSupported, useDueNotificationPref } from "@/lib/dueNotification";
 import { NEW_LIMITS, fromDirParam, loadSettings, saveSettings, toDirParam, type DirParam, type StudySettings } from "@/lib/studySettings";
+import { homeStreakQuery } from "@/lib/progress";
+import { ProgressRing } from "@/components/ProgressRing";
 import { useTheme, type ThemePref } from "@/lib/theme";
 import { cn } from "@/lib/utils";
-import { Check, Monitor, Moon, Sun } from "lucide-react";
+import { Check, ChevronRight, Minus, Monitor, Moon, Plus, Sun } from "lucide-react";
 
 const DIRECTION_CHOICES: { key: DirParam; label: string }[] = [
   { key: "image", label: "Naam bij afbeelding" },
@@ -38,6 +41,20 @@ function Profile() {
   // The bounce only plays for a click on this screen, not for the theme that was already active
   const [touched, setTouched] = useState(false);
   const notify = useDueNotificationPref();
+  const { data: streakInfo } = useQuery(homeStreakQuery);
+  const goal = data?.profile?.daily_goal ?? 20;
+  const reviewedToday = streakInfo?.reviewedToday ?? 0;
+
+  async function saveGoal(next: number) {
+    const value = Math.min(100, Math.max(5, next));
+    if (value === goal || !data) return;
+    const { error } = await supabase.from("profiles").update({ daily_goal: value }).eq("id", data.user.id);
+    if (error) {
+      toast.error("Dagdoel opslaan mislukt");
+      return;
+    }
+    await qc.invalidateQueries({ queryKey: ["profile"] });
+  }
   const [study, setStudy] = useState<StudySettings>(loadSettings);
 
   function updateStudy(next: StudySettings) {
@@ -65,10 +82,22 @@ function Profile() {
         <h1 className="mt-4 text-3xl font-semibold">{name}</h1>
         <p className="text-sm text-muted-foreground">{data?.user.email}</p>
       </div>
-      <div className="tile mt-8 bg-butter p-6 text-on-pastel">
-        <p className="text-xs opacity-80">Statistieken</p>
-        <p className="mt-1 font-semibold">Je leerdashboard komt in een latere fase.</p>
-      </div>
+      <Link
+        to="/progress"
+        aria-label="Bekijk je voortgang"
+        className="tile mt-8 flex items-center gap-4 bg-butter p-5 text-on-pastel"
+      >
+        <ProgressRing size={64} stroke={6} value={reviewedToday / goal} label={`${reviewedToday} van je doel van ${goal} vandaag`} className="text-on-pastel">
+          <span className="text-sm">{reviewedToday}</span>
+        </ProgressRing>
+        <span className="flex-1">
+          <span className="block font-display text-xl font-semibold leading-tight">Voortgang</span>
+          <span className="block text-sm text-on-pastel-muted">
+            {streakInfo ? `${streakInfo.streak} ${streakInfo.streak === 1 ? "dag" : "dagen"} reeks · ${reviewedToday} van ${goal} vandaag` : " "}
+          </span>
+        </span>
+        <ChevronRight className="size-5 shrink-0" />
+      </Link>
       <section className="mt-6 rounded-[30px] border bg-card p-5">
         <p className="font-display text-xl font-semibold">Weergave</p>
         <div role="radiogroup" aria-label="Thema" className="mt-3 grid grid-cols-3 gap-2">
@@ -128,6 +157,36 @@ function Profile() {
               </button>
             );
           })}
+        </div>
+
+        <div className="mt-5 flex items-center justify-between">
+          <p className="text-sm font-semibold">Dagdoel</p>
+          <InfoHint label="Meer over het dagdoel" className="-my-3">
+            Hoeveel kaarten je per dag wilt oefenen, van 5 tot 100. Op het Voortgang-scherm zie je hoe dichtbij je bent.
+          </InfoHint>
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            aria-label="Dagdoel verlagen"
+            disabled={goal <= 5}
+            onClick={() => void saveGoal(goal - 5)}
+            className="flex size-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform active:scale-95 disabled:opacity-40"
+          >
+            <Minus className="size-4" />
+          </button>
+          <p className="flex-1 text-center font-display text-2xl font-semibold tabular-nums" aria-live="polite">
+            {goal} <span className="text-sm font-normal text-muted-foreground">kaarten per dag</span>
+          </p>
+          <button
+            type="button"
+            aria-label="Dagdoel verhogen"
+            disabled={goal >= 100}
+            onClick={() => void saveGoal(goal + 5)}
+            className="flex size-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-transform active:scale-95 disabled:opacity-40"
+          >
+            <Plus className="size-4" />
+          </button>
         </div>
 
         <div className="mt-5 flex items-center justify-between">

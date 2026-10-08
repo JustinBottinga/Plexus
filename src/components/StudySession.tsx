@@ -24,8 +24,11 @@ export function StudySession({
   directions,
   newLimit,
   practice = false,
+  cardIds = null,
 }: {
   categoryIds: string[] | null;
+  /** Study only these cards (for example the weakest ones), whether they are due or not */
+  cardIds?: string[] | null;
   directions: Direction[];
   newLimit: number;
   /** Re-practise everything in the selection; ratings don't touch the review schedule. */
@@ -49,8 +52,8 @@ export function StudySession({
   const userId = useRef<string | null>(null);
   const startedAt = useRef(Date.now());
   const loadId = useRef(0);
-  const opts = useRef({ categoryIds, directions, newLimit, practice });
-  opts.current = { categoryIds, directions, newLimit, practice };
+  const opts = useRef({ categoryIds, directions, newLimit, practice, onlyCardIds: cardIds });
+  opts.current = { categoryIds, directions, newLimit, practice, onlyCardIds: cardIds };
   // Each card is asked in one direction for the whole session (also when it comes back after "Again")
   const [dirOf, setDirOf] = useState<Map<string, Direction>>(new Map());
 

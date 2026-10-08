@@ -4,15 +4,19 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { profileQuery } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { InfoHint } from "@/components/InfoHint";
 import { notificationsSupported, useDueNotificationPref } from "@/lib/dueNotification";
-import { NEW_LIMITS, loadSettings, saveSettings, type StudySettings } from "@/lib/studySettings";
-import type { Direction } from "@/lib/srs";
+import { NEW_LIMITS, fromDirParam, loadSettings, saveSettings, toDirParam, type DirParam, type StudySettings } from "@/lib/studySettings";
 import { useTheme, type ThemePref } from "@/lib/theme";
 import { cn } from "@/lib/utils";
-import { Monitor, Moon, Sun } from "lucide-react";
+import { Check, Monitor, Moon, Sun } from "lucide-react";
+
+const DIRECTION_CHOICES: { key: DirParam; label: string }[] = [
+  { key: "image", label: "Naam bij afbeelding" },
+  { key: "location", label: "Plek bij naam" },
+  { key: "both", label: "Door elkaar" },
+];
 
 const THEMES: { key: ThemePref; label: string; icon: typeof Sun }[] = [
   { key: "system", label: "Systeem", icon: Monitor },
@@ -40,12 +44,6 @@ function Profile() {
     setTouched(true);
     setStudy(next);
     saveSettings(next);
-  }
-
-  // At least one direction stays on: unticking the last one does nothing
-  function toggleDirection(d: Direction, on: boolean) {
-    const next = (["image", "location"] as const).filter((x) => (x === d ? on : study.directions.includes(x)));
-    if (next.length > 0) updateStudy({ ...study, directions: next });
   }
 
   // A value from an older slider (say 7) stays visible as its own choice until another one is picked
@@ -99,37 +97,35 @@ function Profile() {
         <div className="mt-4 flex items-center justify-between">
           <p className="text-sm font-semibold">Richting</p>
           <InfoHint label="Meer over richting" className="-my-3">
-            Naam bij afbeelding: je ziet de afbeelding en noemt de naam. Plek bij naam: je ziet de naam en tikt de plek aan (alleen kaarten met een markering). Staan ze allebei aan, dan krijgt elke kaart willekeurig een van de twee.
+            Naam bij afbeelding: je ziet de afbeelding en noemt de naam. Plek bij naam: je ziet de naam en tikt de plek aan (alleen kaarten met een markering). Door elkaar: soms het een, soms het ander, per kaart willekeurig.
           </InfoHint>
         </div>
-        <div className="mt-2 grid gap-2">
-          {(
-            [
-              ["image", "Naam bij afbeelding"],
-              ["location", "Plek bij naam"],
-            ] as const
-          ).map(([key, label]) => {
-            const on = study.directions.includes(key);
-            const last = on && study.directions.length === 1;
+        <div role="radiogroup" aria-label="Richting" className="mt-2 grid gap-2">
+          {DIRECTION_CHOICES.map(({ key, label }) => {
+            const on = toDirParam(study.directions) === key;
             return (
-              <label
+              <button
                 key={key}
-                htmlFor={`dir-${key}`}
+                type="button"
+                role="radio"
+                aria-checked={on}
+                onClick={() => updateStudy({ ...study, directions: fromDirParam(key) })}
                 className={cn(
-                  "flex min-h-12 cursor-pointer items-center gap-3 rounded-full border px-4 text-sm font-semibold",
+                  "flex min-h-12 items-center gap-3 rounded-full border px-4 text-left text-sm font-semibold transition-colors",
                   on ? "border-foreground" : "border-border text-muted-foreground",
-                  last && "cursor-default",
                 )}
               >
-                <Checkbox
-                  id={`dir-${key}`}
-                  checked={on}
-                  disabled={last}
-                  onCheckedChange={(v) => toggleDirection(key, v === true)}
-                  className="size-6 rounded-full"
-                />
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "flex size-6 shrink-0 items-center justify-center rounded-full border",
+                    on ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/50",
+                  )}
+                >
+                  {on && <Check className="size-4" strokeWidth={3} />}
+                </span>
                 {label}
-              </label>
+              </button>
             );
           })}
         </div>

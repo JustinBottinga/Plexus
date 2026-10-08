@@ -31,7 +31,7 @@ function CardView() {
   const attribution = [card.image_source, card.image_author, card.image_license].filter(Boolean);
 
   return (
-    <div className={cn("min-h-screen px-5 pb-10 pt-8 text-on-pastel", color.bg)}>
+    <div className={cn("-mb-28 min-h-screen px-5 pb-[9.5rem] pt-8 text-on-pastel", color.bg)}>
       <div className="flex items-center justify-between">
         <Link to="/categories/$id" params={{ id: card.category_id }} className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60" aria-label="Terug">
           <ArrowLeft className="size-5" />

@@ -81,7 +81,7 @@ function StudySetup() {
 
   const directionLabel =
     settings.directions.length === 2
-      ? "Beide richtingen"
+      ? "Door elkaar"
       : settings.directions[0] === "location"
         ? "Plek bij naam"
         : "Naam bij afbeelding";

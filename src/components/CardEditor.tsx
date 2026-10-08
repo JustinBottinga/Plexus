@@ -156,8 +156,9 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
     navigate({ to: "/categories/$id", params: { id: card.category_id } });
   }
 
+  // The color runs on underneath the tab bar (-mb cancels the shell padding), so no plain strip shows below it
   return (
-    <div className={cn("min-h-screen px-5 pb-10 pt-8 text-on-pastel transition-colors", color.bg)}>
+    <div className={cn("-mb-28 min-h-screen px-5 pb-[9.5rem] pt-8 text-on-pastel transition-colors", color.bg)}>
       <div className="flex items-center justify-between">
         <button onClick={() => history.back()} className="flex size-12 items-center justify-center rounded-full bg-pastel-surface/60" aria-label="Terug">
           <ArrowLeft className="size-5" />
@@ -182,13 +183,9 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
           </AlertDialog>
         )}
       </div>
-      <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
-        <h1 className="text-4xl font-semibold">{card ? "Kaart bewerken" : "Nieuwe kaart"}</h1>
-        {/* The category is fixed here: it comes from where the card was opened and is not changed in this screen */}
-        {category && (
-          <span className="rounded-full bg-pastel-surface/60 px-4 py-2 text-sm font-semibold text-on-pastel">{category.name}</span>
-        )}
-      </div>
+      <h1 className="mt-6 text-4xl font-semibold">{card ? "Kaart bewerken" : "Nieuwe kaart"}</h1>
+      {/* The category is fixed here: it comes from where the card was opened and is not changed in this screen */}
+      {category && <p className="mt-1 text-sm text-on-pastel/60">{category.name}</p>}
 
       <section className="mt-6 space-y-3">
         <Input className={field} placeholder="Naam (NL)" value={f.name_nl} onChange={up("name_nl")} />
@@ -201,11 +198,11 @@ export function CardEditor({ card, defaultCategory }: { card?: Card; defaultCate
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={(e) => { e.preventDefault(); setDragOver(false); pick(e.dataTransfer.files[0]); }}
-            className={cn("tile flex aspect-[4/3] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-on-pastel/25 bg-pastel-surface/50", dragOver && "bg-pastel-surface/80")}
+            className={cn("tile flex aspect-[4/3] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-on-pastel/25 bg-pastel-surface/50 p-8 text-center", dragOver && "bg-pastel-surface/80")}
           >
             <ImagePlus className="size-8" />
-            <span className="mt-2 font-semibold">Sleep een afbeelding hierheen, plak met Ctrl+V of klik om te uploaden</span>
-            <span className="text-xs text-on-pastel-muted">PNG of JPG, maximaal 10 MB</span>
+            <span className="mt-3 max-w-xs font-semibold">Sleep een afbeelding hierheen, plak met Ctrl+V of klik om te uploaden</span>
+            <span className="mt-1 text-xs text-on-pastel-muted">PNG of JPG, maximaal 10 MB</span>
             <input type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />
           </label>
         ) : (

@@ -68,13 +68,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Plexus — flashcards" },
       { name: "description", content: "Anatomie-flashcards voor studenten." },
+      { name: "apple-mobile-web-app-title", content: "Plexus" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      // .ico for browsers without SVG favicons (Safari), the SVG for the rest, and a PNG for iOS: its share sheet and
+      // "add to home screen" only look at apple-touch-icon and otherwise show a plain letter
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

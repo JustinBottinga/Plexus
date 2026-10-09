@@ -180,6 +180,45 @@
   mask-size: 32px 32px;
 }
 
+/* One full turn, used by the colored plus signs on the start screen */
+@utility spin-once {
+  transform-origin: center;
+  animation: spin-once 0.7s var(--spring);
+}
+
+@keyframes spin-once {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* The dot on the i of the start screen headline: a hard switch between the category colors, no fade */
+@utility i-dot {
+  position: relative;
+  display: inline-block;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0.17em;
+    width: 0.18em;
+    height: 0.18em;
+    border-radius: 9999px;
+    transform: translateX(-50%);
+    background: var(--butter-deep);
+    animation: dot-colors 5.4s step-end infinite;
+  }
+}
+
+@keyframes dot-colors {
+  0% { background: var(--butter-deep); }
+  16.667% { background: var(--periwinkle-deep); }
+  33.333% { background: var(--mint-deep); }
+  50% { background: var(--peach-deep); }
+  66.667% { background: var(--sky-deep); }
+  83.333% { background: var(--lilac-deep); }
+}
+
 @utility tile {
   border-radius: var(--radius-tile);
   transition: transform 0.35s var(--spring), box-shadow 0.25s;

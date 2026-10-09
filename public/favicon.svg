@@ -1,20 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t">
   <title id="t">Plexus</title>
-  <rect x="5" y="5" width="502" height="502" rx="108" fill="#faf8f3" stroke="#d8d4c8" stroke-width="10"/>
-  <path d="M100 70v60M70 100h60" stroke="#ebbd57" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M204 70v60M174 100h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M308 70v60M278 100h60" stroke="#8a99e3" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M412 70v60M382 100h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M100 174v60M70 204h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M204 174v60M174 204h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M308 174v60M278 204h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M412 174v60M382 204h60" stroke="#7ad4a5" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M100 278v60M70 308h60" stroke="#c09be0" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M204 278v60M174 308h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M308 278v60M278 308h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M412 278v60M382 308h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M100 382v60M70 412h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M204 382v60M174 412h60" stroke="#eb9a75" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M308 382v60M278 412h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M412 382v60M382 412h60" stroke="#6fc6e6" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <circle cx="256" cy="256" r="256" fill="#141414"/>
+  <path d="M136 96v80M96 136h80" stroke="#ebbd57" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M256 96v80M216 136h80" stroke="#faf8f3" stroke-opacity="0.4" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M376 96v80M336 136h80" stroke="#8a99e3" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M136 216v80M96 256h80" stroke="#faf8f3" stroke-opacity="0.4" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M256 216v80M216 256h80" stroke="#7ad4a5" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M376 216v80M336 256h80" stroke="#faf8f3" stroke-opacity="0.4" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M136 336v80M96 376h80" stroke="#faf8f3" stroke-opacity="0.4" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M256 336v80M216 376h80" stroke="#eb9a75" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M376 336v80M336 376h80" stroke="#faf8f3" stroke-opacity="0.4" stroke-width="15" stroke-linecap="round" fill="none"/>
 </svg>

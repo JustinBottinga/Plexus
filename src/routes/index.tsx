@@ -39,15 +39,16 @@ function Landing() {
       });
   }, [navigate, router]);
 
+  // select-none: nothing on this screen is meant to be selected. It does not hide anything from screen readers or the keyboard.
   return (
-    <main className="mx-auto flex min-h-svh max-w-md flex-col px-6 pb-8 pt-6">
+    <main className="mx-auto flex min-h-svh max-w-md select-none flex-col px-6 pb-8 pt-6">
       <div aria-hidden="true" className="plus-grid pointer-events-none fixed inset-0 -z-10" />
 
       <ColorPlusField avoid={avoid} />
 
       <header ref={headerRef} className="flex items-center justify-between">
         <p className="font-display text-2xl font-semibold">Plexus</p>
-        <Link to="/auth" className="flex h-12 items-center rounded-full px-4 text-sm font-semibold text-muted-foreground">
+        <Link to="/auth" className="flex h-12 items-center rounded-full px-4 text-sm font-semibold text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           Inloggen
         </Link>
       </header>

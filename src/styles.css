@@ -180,10 +180,10 @@
   mask-size: 32px 32px;
 }
 
-/* One full turn, used by the colored plus signs on the start screen */
+/* One full, calm turn, used by the colored plus signs on the start screen */
 @utility spin-once {
   transform-origin: center;
-  animation: spin-once 0.7s var(--spring);
+  animation: spin-once 1.6s cubic-bezier(0.45, 0, 0.25, 1);
 }
 
 @keyframes spin-once {
@@ -200,10 +200,10 @@
     content: "";
     position: absolute;
     left: 50%;
-    top: 0.17em;
-    width: 0.18em;
-    height: 0.18em;
-    border-radius: 9999px;
+    top: 0.13em;
+    width: 0.15em;
+    height: 0.12em;
+    border-radius: 50%;
     transform: translateX(-50%);
     background: var(--butter-deep);
     animation: dot-colors 5.4s step-end infinite;

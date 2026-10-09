@@ -21,7 +21,7 @@ function SpinPlus({ spot }: { spot: Spot }) {
   return (
     <span
       role="presentation"
-      className="pointer-events-auto absolute flex cursor-pointer items-center justify-center"
+      className="pointer-events-auto absolute flex cursor-pointer touch-manipulation select-none items-center justify-center"
       style={{
         left: spot.col * CELL + CELL / 2 - TARGET / 2,
         top: spot.row * CELL + CELL / 2 - TARGET / 2,
@@ -41,7 +41,8 @@ function SpinPlus({ spot }: { spot: Spot }) {
         onAnimationEnd={() => setSpinning(false)}
         style={{ color: spot.color }}
       >
-        <path d="M16 10.5v11M10.5 16h11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+        {/* The same plus as the grid mask in styles.css: same size, same stroke */}
+        <path d="M16 11.5v9M11.5 16h9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" fill="none" />
       </svg>
     </span>
   );

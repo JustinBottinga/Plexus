@@ -47,8 +47,7 @@ function Landing() {
       <ColorPlusField avoid={avoid} />
 
       <header ref={headerRef} className="flex items-center justify-between">
-        {/* The logo is drawn for a light page, so it gets a light tile: it stays visible in dark mode too */}
-        <img src="/logo.svg" alt="Plexus" width={88} height={88} className="size-[88px] rounded-2xl bg-[#faf8f3]" />
+        <p className="font-display text-2xl font-semibold">Plexus</p>
         <Link to="/auth" className="pointer-events-auto flex h-12 items-center rounded-full px-4 text-sm font-semibold text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           Inloggen
         </Link>

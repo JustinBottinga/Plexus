@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t">
+  <title id="t">Plexus</title>
+  <rect width="512" height="512" rx="112" fill="#141414"/>
+  <path d="M112 82v60M82 112h60" stroke="#ebbd57" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M208 82v60M178 112h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M304 82v60M274 112h60" stroke="#8a99e3" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M400 82v60M370 112h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M112 178v60M82 208h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M208 178v60M178 208h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M304 178v60M274 208h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M400 178v60M370 208h60" stroke="#7ad4a5" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M112 274v60M82 304h60" stroke="#c09be0" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M208 274v60M178 304h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M304 274v60M274 304h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M400 274v60M370 304h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M112 370v60M82 400h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M208 370v60M178 400h60" stroke="#eb9a75" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M304 370v60M274 400h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M400 370v60M370 400h60" stroke="#6fc6e6" stroke-width="11" stroke-linecap="round" fill="none"/>
+</svg>

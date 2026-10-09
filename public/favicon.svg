@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t">
   <title id="t">Plexus</title>
-  <rect width="512" height="512" rx="112" fill="#141414"/>
-  <path d="M112 82v60M82 112h60" stroke="#ebbd57" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M208 82v60M178 112h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M304 82v60M274 112h60" stroke="#8a99e3" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M400 82v60M370 112h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M112 178v60M82 208h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M208 178v60M178 208h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M304 178v60M274 208h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M400 178v60M370 208h60" stroke="#7ad4a5" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M112 274v60M82 304h60" stroke="#c09be0" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M208 274v60M178 304h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M304 274v60M274 304h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M400 274v60M370 304h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M112 370v60M82 400h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M208 370v60M178 400h60" stroke="#eb9a75" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M304 370v60M274 400h60" stroke="#faf8f3" stroke-opacity="0.32" stroke-width="11" stroke-linecap="round" fill="none"/>
-  <path d="M400 370v60M370 400h60" stroke="#6fc6e6" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <rect x="5" y="5" width="502" height="502" rx="108" fill="#faf8f3" stroke="#d8d4c8" stroke-width="10"/>
+  <path d="M100 70v60M70 100h60" stroke="#ebbd57" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M204 70v60M174 100h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M308 70v60M278 100h60" stroke="#8a99e3" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M412 70v60M382 100h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M100 174v60M70 204h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M204 174v60M174 204h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M308 174v60M278 204h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M412 174v60M382 204h60" stroke="#7ad4a5" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M100 278v60M70 308h60" stroke="#c09be0" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M204 278v60M174 308h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M308 278v60M278 308h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M412 278v60M382 308h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M100 382v60M70 412h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M204 382v60M174 412h60" stroke="#eb9a75" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M308 382v60M278 412h60" stroke="#181614" stroke-opacity="0.4" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M412 382v60M382 412h60" stroke="#6fc6e6" stroke-width="11" stroke-linecap="round" fill="none"/>
 </svg>

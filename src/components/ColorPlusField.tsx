@@ -1,4 +1,4 @@
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useState, type RefObject } from "react";
 import { PALETTE } from "@/lib/palette";
 
 /** Same pitch as the plus grid in styles.css (the `plus-grid` mask), so these sit exactly on a grid cell. */
@@ -6,6 +6,9 @@ const CELL = 32;
 const TARGET = 48;
 
 type Spot = { col: number; row: number; color: string };
+
+// useLayoutEffect on the client, so the pluses are placed before the first frame after hydration, not after it
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 const shuffle = <T,>(items: T[]): T[] => {
   const a = [...items];
@@ -55,7 +58,7 @@ function SpinPlus({ spot }: { spot: Spot }) {
 export function ColorPlusField({ avoid }: { avoid: RefObject<HTMLElement | null>[] }) {
   const [spots, setSpots] = useState<Spot[]>([]);
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     const place = () => {
       const cols = Math.floor(window.innerWidth / CELL);
       const rows = Math.floor(window.innerHeight / CELL);

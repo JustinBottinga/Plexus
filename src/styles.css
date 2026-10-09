@@ -201,8 +201,8 @@
     position: absolute;
     left: 50%;
     top: 0.13em;
-    width: 0.15em;
-    height: 0.12em;
+    width: 0.17em;
+    height: 0.136em; /* 80% of the width */
     border-radius: 50%;
     transform: translateX(-50%);
     background: var(--butter-deep);

@@ -41,14 +41,15 @@ function Landing() {
 
   // select-none: nothing on this screen is meant to be selected. It does not hide anything from screen readers or the keyboard.
   return (
-    <main className="mx-auto flex min-h-svh max-w-md select-none flex-col px-6 pb-8 pt-6">
+    <main className="pointer-events-none relative z-10 mx-auto flex min-h-svh max-w-md select-none flex-col px-6 pb-8 pt-6">
       <div aria-hidden="true" className="plus-grid pointer-events-none fixed inset-0 -z-10" />
 
       <ColorPlusField avoid={avoid} />
 
       <header ref={headerRef} className="flex items-center justify-between">
-        <p className="font-display text-2xl font-semibold">Plexus</p>
-        <Link to="/auth" className="flex h-12 items-center rounded-full px-4 text-sm font-semibold text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        {/* The logo is drawn for a light page, so it gets a light tile: it stays visible in dark mode too */}
+        <img src="/logo.svg" alt="Plexus" width={88} height={88} className="size-[88px] rounded-2xl bg-[#faf8f3]" />
+        <Link to="/auth" className="pointer-events-auto flex h-12 items-center rounded-full px-4 text-sm font-semibold text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           Inloggen
         </Link>
       </header>
@@ -66,7 +67,7 @@ function Landing() {
         </div>
       </div>
 
-      <div ref={buttonRef}>
+      <div ref={buttonRef} className="pointer-events-auto">
         <Button asChild size="lg" className="w-full">
           <Link to="/auth">Aan de slag</Link>
         </Button>
